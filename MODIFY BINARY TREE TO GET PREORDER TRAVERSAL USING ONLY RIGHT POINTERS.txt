@@ -1,0 +1,58 @@
+import java.util.*;
+
+public class GFG {
+    static class Node{
+        int data;
+        Node left= null, right=null;
+        Node(int data){
+            this.data=data;
+        }
+    }
+    static Node[] modify(Node root){
+        Node[] res = {null, null};
+        if(root==null) return res;
+        res[0] = root;
+        res[1] = root;
+        Node[] left = modify(root.left);
+        Node[] right = modify(root.right);
+        
+        if(left[0]!=null && right[0]!=null){
+            root.right = left[0];
+            left[1].right = right[0];
+            res[1] = right[1];
+        }else if(right[0]!=null){
+            root.right = right[0];
+            res[1] = right[1];
+        }else if(left[0]!=null){
+            root.right = left[0];
+            res[1] = left[1];
+        }
+        return res;
+    }
+    static void preOrderUsingRight(Node root){
+        while(root!=null){
+            System.out.print(root.data+" ");
+            root = root.right;
+        }
+        System.out.println();
+    }
+    static void preOrder(Node root){
+        if(root==null) return;        
+        System.out.print(root.data+" ");
+        preOrder(root.left);
+        preOrder(root.right);
+    }
+    public static void main(String[] args){
+        Node root = new Node(4);
+        root.left = new Node(2);
+        root.right = new Node(6);
+        root.left.right = new Node(3);
+        root.left.left = new Node(1);
+        root.right.right = new Node(7);
+        root.right.left = new Node(5);
+        preOrder(root);
+        System.out.println();
+        modify(root);
+        preOrderUsingRight(root);
+    }
+}

@@ -1,0 +1,76 @@
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.lang.*;
+Given an NxN chessboard and a Knight at position (x, y). The Knight has to take exactly K steps, where at each step it chooses any of the 8 directions uniformly at random. Find the probability that the Knight remains in the chessboard after taking K steps, with the condition that it can’t enter the board again once it leaves it.
+ 
+
+Example 1:
+
+Input : N = 8, x = 0, y = 0, K = 3
+Output: 0.125000
+Example 2:
+
+Input: N = 4, x = 1, y = 2, k = 4
+Output: 0.024414
+
+
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String s = br.readLine().trim();
+            String []S = s.split(" ");
+            int N = Integer.parseInt(S[0]);
+            int start_x = Integer.parseInt(S[1]);
+            int start_y = Integer.parseInt(S[2]);
+            int step = Integer.parseInt(S[3]);
+            Solution ob = new Solution();
+            double ans = ob.findProb(N, start_x, start_y, step);
+            System.out.println(String.format("%.6f", ans));           
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution
+{
+    double prob = 1;
+    int[] r = { 1, 2, 2, 1, -1, -2, -2, -1 };
+    int[] c = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    public double findProb(int n, int x, int y, int s)
+    {
+        if(s==0) return 1.0;
+        double[][][] rec = new double [n][n][s+1];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++) rec[i][j][0]=1;
+        }
+        for(int st=1;st<=s; st++){
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    double prob = 0;
+                    for(int i1=0;i1<8;i1++){
+                        int k=r[i1]+i, l=c[i1]+j;
+                        if(k>=0 && k<n && l>=0 && l<n){
+                            prob+=rec[k][l][st-1]/8.0;
+                        }
+                    }
+                    rec[i][j][st] = prob;
+                }
+            }
+        }
+        String str = String.valueOf(rec[x][y][s]);
+        System.out.println(str);
+        if(str.length()>8) str = str.substring(0,str.length()-1);
+        return new Double(str);
+    }
+}

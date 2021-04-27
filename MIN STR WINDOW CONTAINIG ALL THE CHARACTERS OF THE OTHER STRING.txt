@@ -1,0 +1,70 @@
+// { Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner scan = new Scanner(System.in);
+		int test = scan.nextInt();
+		
+		while(test > 0){
+		    String s = scan.next();
+		    String t = scan.next();
+		    
+		    System.out.println(new solve().smallestWindow(s, t));
+		    test--;
+		}
+	}
+}// } Driver Code Ends
+
+
+class solve
+{
+    static int[] patMp, strMp;
+    static boolean isValid(){
+        for(int i=0;i<26;i++){
+            if(patMp[i]>strMp[i]) return false;
+        }
+        return true;
+    }
+    
+    public static String smallestWindow(String S, String P){
+        // Your code here
+        patMp = new int[26];
+        strMp = new int[26];
+        char[] str = S.toCharArray(),
+               pat = P.toCharArray();
+        
+        for(char ch : pat) patMp[ch-'a']++;
+        int i=0,j=0;
+        while(j<str.length && !isValid()){
+            if(patMp[str[j]-'a']>0) strMp[str[j]-'a']++;
+            j++;
+        }
+        // System.out.println(j+"\n"+Arrays.toString(patMp)+"\n"+Arrays.toString(strMp));
+        if(!isValid()) return "-1";
+        int res = j;
+        String ret = S.substring(0, j);
+        j--;
+        while(i<str.length && j<str.length){
+            if(isValid()){
+                if(res > j-i+1){
+                    res = j-i+1;
+                    ret = S.substring(i, j+1);
+                }
+                if(patMp[str[i]-'a']>0){
+                    strMp[str[i]-'a']--;
+                }
+                i++;            
+            }else{
+                j++;
+                if(j<str.length && patMp[str[j]-'a']>0){
+                    strMp[str[j]-'a']++;
+                }
+            }
+        }
+        // System.out.println(res);
+        return ret;
+    }
+}

@@ -1,0 +1,42 @@
+import java.util.*;
+
+public class GFG {
+    public static void main(String[] args){
+        int[][] res = {{6,-5,-7,4,-4},{-9,3,-6,5,2},{-10, 4, 7, -6, 3}, {-8, 9, -3, 3, -7}};
+        int r = res.length, c = res[0].length;
+        for(int[] a:res) System.out.println(Arrays.toString(a));
+        for(int j=1;j<c;j++) res[0][j]+=res[0][j-1];
+        for(int j=1;j<r;j++) res[j][0]+=res[j-1][0];
+        for(int i=1;i<r;i++){
+            for(int j=1;j<c;j++){
+                res[i][j] += res[i-1][j]+(res[i][j-1]-res[i-1][j-1]);
+            }
+        }
+
+        int[] cordinates = new int[4];
+
+        int max = res[0][0];;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+
+                for(int k=i+1;k<r;k++){
+                    for(int l=j+1;l<c;l++){
+                        int sum = res[k][l];
+                        if(i-1>=0) sum -= res[i-1][l];
+                        if(j-1>=0) sum -= res[k][j-1];
+                        if(i-1>=0 && j-1>=0) sum += res[i-1][j-1];
+                        if(sum > max){
+                            cordinates[0]=i;cordinates[1]=j;cordinates[2]=k;cordinates[3]=l;
+                        }
+                        System.out.println("("+i+","+j+") to ("+k+","+l+")   sum is: "+sum);
+                        max = Math.max(sum, max);
+                    }
+                }
+            }
+        }
+
+        System.out.println(max+"   "+Arrays.toString(cordinates));
+        System.out.println();
+        for(int[] a:res) System.out.println(Arrays.toString(a));
+    }
+}

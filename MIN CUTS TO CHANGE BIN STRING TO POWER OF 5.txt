@@ -1,0 +1,91 @@
+
+Given a string s containing 0's and 1's. You have to return a smallest positive integer C, such that the binary string can be cut into C pieces and each piece should be of the power of 5  with no leading zeros.
+
+Input:
+The first line of the input contains T denoting the number of test cases. For each test case, there is a string s.
+
+Output:
+For each test case, the output is an integer C. If no such cuts are possible then return -1. 
+
+Constraints:
+1<=s.length()<=50
+Note: The string s is a binary string.
+
+Example:
+Input
+3
+101101101
+1111101
+00000
+Output:
+3
+1
+-1
+
+Explanation:
+1.We can split the given string into three “101”s, where 101 is the binary representation of 5.
+2."1111101 " is 125 which is 5^3.
+3.0 is not a power of 5.
+
+
+For Input:
+7
+1
+101101101
+1111101
+00000
+10110000100001011001011000101110110010001011000010
+101101101101101101101101101101101101101101101101
+111000100111000110000111000000001011010010101
+your output is: 
+Result :1
+Result :3
+Result :1
+Result :-1
+Result :-1
+Result :16
+Result :12
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static boolean isPowOf5(String s){
+        if(s.equals("")) return false;
+        long n = Long.parseLong(s, 2);
+        if(n==0) return false;
+        while(n%5 == 0){
+            n = n/5;
+        }
+        if(n==1) return true;
+        return false;
+    }
+	public static void main (String[] args) {
+		Scanner in = new Scanner(System.in);
+		int t = in.nextInt();
+		while(t-- > 0){
+		    String s = in.next();
+		    int n=s.length(), k = 0, count = 0;
+		    boolean no = false;
+		    while(k<n){
+		        int temp = k;
+    		    for(int i=n;i>=k;i--){
+    		        if(isPowOf5(s.substring(k,i))){
+    		            System.out.println(s.substring(k,i));
+    		            count++;
+    		            k=i;
+    		        }
+    		    }
+    		    if(temp==k){
+    		        no=true;
+    		        break;
+    		    }
+		    }
+		    if(no) count = -1;
+		    System.out.println("Result :"+count);
+		}
+		in.close();
+	}
+}

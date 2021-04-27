@@ -1,0 +1,79 @@
+import java.util.*;
+
+class Node{
+    int data;
+    Node next;
+    Node(int ele){
+        this.data = ele;
+    }
+}
+public class GFG {
+
+    static class Pair{
+        Node start,end;
+        Pair(Node start, Node end){
+            this.start = start; this.end = end;
+        }
+        public String toString(){
+            return "("+start.data+","+end.data+")";
+        }
+    }
+    static Node add(Node head, int ele){
+        if(head==null) return new Node(ele);
+        head.next = add(head.next, ele);
+        return head;
+    }
+    static void dis(Node head){
+        while(head!=null){
+            System.out.print(head.data+" ");
+            head = head.next;
+        }System.out.println();
+    }
+    public static void main(String[] args){
+        int[] a = {6,3,8,10,7,4,5,2,1,9};
+        Node head = null;
+        for(int ele:a){
+            head = add(head, ele);
+        }
+        dis(head);
+        Node ptr = head;
+        Pair[] ref = new Pair[100];
+        int k=4,i=0;
+        while(ptr!=null){
+            Node temp = ptr;
+            int count = k;
+            while(count-->1 && ptr!=null && ptr.next!=null){
+                ptr = ptr.next;
+            }
+            ref[i++] = new Pair(temp, ptr);
+            if(ptr!=null){
+                temp = ptr.next;
+                ptr.next = null;
+                ptr = temp;
+            }
+        }
+        int length = i--;
+        int j=i;
+        i=0;
+        while(i<j){
+            Pair temp = ref[i];
+            ref[i] = ref[j];
+            ref[j] = temp;
+            i++; j--;
+        }
+        
+        head = ref[0].start;
+        i = 0;
+        while(ref[i]!=null && ref[i+1]!=null){
+            if(ref[i].end == null) break;
+            ref[i].end.next = ref[i+1].start;
+            i++;
+        }
+        dis(head);
+    }
+}
+
+
+OUTPUT:
+6 3 8 10 7 4 5 2 1 9 
+1 9 7 4 5 2 6 3 8 10

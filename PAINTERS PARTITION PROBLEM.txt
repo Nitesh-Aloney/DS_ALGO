@@ -1,0 +1,47 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int[] boards;
+    static int painters,n;
+    static boolean isPoss(int target){
+        int k = 1, sum = 0;
+        for(int i=0;i<n;i++){
+            sum+=boards[i];
+            if(sum>target){
+                k++;
+                sum = boards[i];
+            }
+            if(k>painters) return false;
+        }
+        return true;
+    }
+	public static void main(String[] args){
+		Scanner in = new Scanner(System.in);
+		int t = in.nextInt();
+		while(t-->0){
+		    painters = in.nextInt();
+    	    n = in.nextInt();
+    	    boards = new int[n];
+    	    int l = Integer.MIN_VALUE, h = 0;
+    		for(int i=0;i<n;i++){
+        	    boards[i] = in.nextInt();
+                l = Math.max(l, boards[i]);
+                h+=boards[i];
+    		}
+    		int ans = l;
+    		while(l<=h){
+    		    int m = (l+h)/2;
+    		    if(isPoss(m)){
+    		        ans = m;    h = m-1;
+    		    }
+    		    else l = m+1;
+    		}
+		    System.out.println(ans);
+		}
+		in.close();
+	}
+}

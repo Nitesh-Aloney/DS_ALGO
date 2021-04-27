@@ -1,0 +1,44 @@
+7
+[[1,0],[0,3],[0,2],[3,2],[2,5],[4,5],[5,6],[2,4]]
+3
+[[0,1],[0,2],[1,2]]
+20
+[[0,10],[3,18],[5,5],[6,11],[11,14],[13,1],[15,1],[17,4]]
+10
+[[5,6],[0,2],[1,7],[5,9],[1,8],[3,4],[0,6],[0,7],[0,3],[8,9]]
+
+
+
+class Solution{
+    boolean[][] graph;
+    boolean[] v, s;
+    int[] res;
+    int ind;
+    boolean dfs(int key){
+        if(s[key]) return true;
+        if(v[key]) return false;
+        v[key]=true;
+        s[key]=true;
+        for(int i=0;i<v.length;i++){
+            if(graph[key][i] && dfs(i)) return true;
+        }
+        s[key]=false;
+        res[ind--] = key;
+        return false;
+    }
+    public int[] findOrder(int n, int[][] edges) {
+        graph = new boolean[n][n];
+        v = new boolean[n];
+        s = new boolean[n];
+        res = new int[n];
+        ind=n-1;
+        for(int[] edge : edges){
+            if(edge[0]==edge[1]) return new int[0];
+            graph[edge[1]][edge[0]]=true;
+        }
+        for(int i=0;i<n;i++){
+            if(dfs(i)) return new int[0];
+        }
+        return res;
+    }
+}}

@@ -1,0 +1,53 @@
+import java.util.*;
+
+import java.lang.*;
+import java.io.*;
+
+class Segment_Tree {    
+    static int[] a, seg;
+    static void constructSeg(int al, int ah, int ind){
+        if(al==ah) seg[ind] = a[ah];
+        else{
+            int l = 2*ind + 1;
+            int r = 2*ind + 2;
+            int m = (al+ah)/2;
+            constructSeg(al, m, l);
+            constructSeg(m+1, ah, r);
+            seg[ind] = seg[l]+seg[r];
+        }
+    }
+
+    static int rangeSumQuery(int si, int al, int ah, int sl, int sh){
+        if(al>sh || ah<sl || si>=seg.length) return 0;
+        else if((al<=sl && ah>=sh) || (sl==sh)) return seg[si];
+        int m = (sl+sh)/2,
+        leftres = rangeSumQuery(2*si+1, al, ah, sl, m),
+        rightres = rangeSumQuery(2*si+2, al, ah, m+1, sh);
+        return leftres+rightres;
+    }
+
+    static void updateQuery(int si, int ai, int al, int ah, int diff){
+        if(si<seg.length) seg[si]+=diff;
+        if(al==ah) return;
+        int m = (al+ah)/2;
+        if(ai<=m) updateQuery(2*si+1, ai, al, m, diff);
+        else updateQuery(2*si+2, ai, m+1, ah, diff);
+    }
+    
+    public static void main(String[] args) {
+        int[] temp = {1,2,3,4,5};
+        a = temp;
+        int n = a.length, sl = 0;
+        int t = n;
+        while(t!=1){
+            t/=2;
+            sl += (sl*2+1);
+        }
+        sl+=n;
+        seg = new int[sl];
+        constructSeg(0, a.length-1, 0);
+        System.out.println(Arrays.toString(seg));
+        updateQuery(0, 0, 0, 4, 6-a[0]);
+        System.out.println(Arrays.toString(seg));
+    }
+}

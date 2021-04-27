@@ -1,0 +1,115 @@
+Given two strings. Find the smallest window in the first string consisting of all the characters of the second string.
+
+Example 1:
+
+Input:
+S = timetopractice
+P = toc
+Output: toprac
+Explanation: toprac is the smallest
+subset in which toc can be found.
+Example 2:
+
+Input:
+S = zoomlazapzo
+P = oza
+Output: apzo
+Explanation: To find oza in the
+zoomlazapzo the smallest subset is
+apzo.
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function smallestWindow() which takes two string S and P as inputs and returns the smallest window in string S having all the characters of the string P. In case there are multiple such windows of same length, return the one with the least starting index. Return "-1" in case there's no such window present. 
+
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(1)
+
+Constraints: 
+1 <= |S|, |P| <= 1000
+
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner scan = new Scanner(System.in);
+		int test = scan.nextInt();
+		
+		while(test > 0){
+		    String s = scan.next();
+		    String t = scan.next();
+		    
+		    System.out.println(new solve().smallestWindow(s, t));
+		    test--;
+		}
+	}
+}// } Driver Code Ends
+
+
+class solve
+{
+    // return the smallest window in S with all the characters of P
+    // if no such window exists, return "-1" 
+    static Map<Character, Integer> mp, ms;
+
+    public static boolean evaluate() {
+        for (Map.Entry<Character, Integer> e : mp.entrySet()) {
+            if (ms.get(e.getKey()) < e.getValue())
+                return false;
+        }
+        return true;
+    }
+
+    public static String smallestWindow(String s, String p) {
+        mp = new TreeMap<>();
+        ms = new TreeMap<>();
+        int pl = p.length(), sl = s.length();
+        for (int i = 0; i < pl; i++) {
+            char ch = p.charAt(i);
+            mp.put(ch, mp.getOrDefault(ch, 0) + 1);
+            ms.put(ch, 0);
+        }
+        int i = 0, j = 0;
+        for (; j < sl; j++) {
+            char ch = s.charAt(j);
+            if (mp.containsKey(ch)) {
+                ms.put(ch, ms.get(ch) + 1);
+                if (evaluate())
+                    break;
+            }
+        }
+        if (j == sl)
+            return "-1";
+
+        String res = s.substring(i, j + 1);
+        System.out.println("at : i=" + i + " j=" + j + "\nmp: " + mp + "     ms: " + ms + "\nres: " + res);
+        while (i < sl - pl + 1) {
+            char ch = s.charAt(i);
+            i++;
+            if(mp.containsKey(ch)){
+                ms.put(ch, ms.get(ch) - 1);
+                if (j<(sl-1) && ms.get(ch) < mp.get(ch)) {
+                    j++;
+                    while (j < sl && ms.get(ch) < mp.get(ch)) {
+                        char chj = s.charAt(j);
+                        if (mp.containsKey(chj)) {
+                            ms.put(chj, ms.get(chj) + 1);
+                        }
+                        if (ms.get(ch) >= mp.get(ch)) break;
+                        j++;
+                    }
+                }
+                if(ms.get(ch)>=mp.get(ch)) if(j<sl && (j-i+1)<res.length()) res=s.substring(i, j+1);
+            }else{
+                char f = res.charAt(0);
+                if(mp.containsKey(f)){
+                    if(mp.get(f)<=ms.get(f)-1) res=res.substring(1);
+                }else res = res.substring(1);
+            }
+        }
+        return res;
+    }
+}

@@ -1,0 +1,61 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int tc = scan.nextInt();
+
+        while (tc-- > 0) {
+            int V = scan.nextInt();
+            int C = scan.nextInt();
+            int E = scan.nextInt();
+
+            List<Integer>[] G = new ArrayList[V];
+            for (int i = 0; i < V; i++) {
+                G[i] = new ArrayList<>();
+            }
+
+            for (int i = 0; i < E; i++) {
+                int u = scan.nextInt() - 1;
+                int v = scan.nextInt() - 1;
+                G[u].add(v);
+                G[v].add(u);
+            }
+            int[] color = new int[V];
+
+            System.out.println(new solve().graphColoring(G, color, 0, C) ? 1 : 0);
+        }
+    }
+}
+
+class solve {
+    static boolean canColor(List<Integer>[] g, int[] color, int key, int c){
+        for(Integer ele : g[key]){
+            if(key != ele && c==color[ele]) return false;
+        }
+        return true;
+    }
+    static boolean solved(List<Integer>[] g, int[] color){
+        for(int i=0;i<g.length;i++){
+            for(int conn : g[i]){
+                if((conn!=i)&&(color[i]==0 || color[conn]==color[i])) return false;
+            }
+        }
+        return true;
+    }
+    public static boolean graphColoring(List<Integer>[] g, int[] color, int x, int c){
+        // System.out.println(Arrays.toString(g)+"\nColors: "+Arrays.toString(color));
+        // System.out.println(x+" - "+c);
+        if(x==g.length) return solved(g, color);
+        for(int co=1;co<=c;co++){
+            if(canColor(g, color, x, co)){
+                color[x]=co;
+                if(graphColoring(g, color, x+1, c)) return true;
+                color[x]=0;
+            }
+        }
+        return false;
+    }
+}

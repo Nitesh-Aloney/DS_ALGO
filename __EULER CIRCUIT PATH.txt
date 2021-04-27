@@ -1,0 +1,77 @@
+Eulerian Path is a path in graph that visits every edge exactly once. Eulerian Circuit is an Eulerian Path which starts and ends on the same vertex. The task is to find that there exists the Euler Path or circuit or none in given undirected graph with V vertices and adjacency list adj.
+
+
+Your Task:
+You don't need to read or print anything. Your task is to complete the function isEulerCircuilt() which takes number of vertices in the graph denoting as V and adjacency list of graph denoting as adj and returns 1 if graph contains Eulerian Path, 2 if graph contains Eulerian Circuit 0 otherwise.
+ 
+
+Expected Time Complexity: O(V+E) where E is the number of edges in graph.
+Expected Space Complexity: O(V)
+ 
+
+Constraints:
+1 ≤ V, E ≤ 104
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String[] s = br.readLine().trim().split(" ");
+            int V = Integer.parseInt(s[0]);
+            int E = Integer.parseInt(s[1]);
+            ArrayList<ArrayList<Integer>>adj = new ArrayList<>();
+            for(int i = 0; i < V; i++)
+                adj.add(i, new ArrayList<Integer>());
+            for(int i = 0; i < E; i++){
+                String[] S = br.readLine().trim().split(" ");
+                int u = Integer.parseInt(S[0]);
+                int v = Integer.parseInt(S[1]);
+                adj.get(u).add(v);
+                adj.get(v).add(u);
+            }
+            Solution obj = new Solution();
+            int ans = obj.isEularCircuitExist(V, adj);
+            System.out.println(ans);
+        }
+    }
+}
+
+class Solution
+{
+    ArrayList<ArrayList<Integer>> g;
+    boolean[] v;
+    
+    boolean dfs(int key, int start, int prev){
+        v[key] = true;
+        for(int conn:g.get(key)){
+            if(!v[conn]){
+                if(dfs(conn, start, key)) return true;
+            }
+        }
+        for(int conn:g.get(key)){
+            if(conn!=prev && conn==start) return true;
+        }
+        return false;
+    }
+    
+    public int isEularCircuitExist(int n, ArrayList<ArrayList<Integer>> adj){
+        g = adj;
+        v = new boolean[n];
+        
+        boolean res = true;
+        int oddDeg = 0;
+        for(int i=0;i<n;i++){
+            if(!v[i]) res=res&&dfs(i, i, -1);
+            if(g.get(i).size()%2==1) oddDeg+=1;
+        }
+        return oddDeg==0&&res ? 2 : oddDeg==2 ? 1 : 0;
+    }
+}

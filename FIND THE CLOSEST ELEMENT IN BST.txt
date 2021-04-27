@@ -1,0 +1,177 @@
+Given a BST and an integer. Find the least absolute difference between any node value of the BST and the given integer.
+
+Example 1:
+
+Input:
+        10
+      /   \
+     2    11
+   /  \ 
+  1    5
+      /  \
+     3    6
+      \
+       4
+K = 13
+Output: 2
+Explanation: K=13. The node that has
+value nearest to K is 11. so the answer
+is 2
+Example 2:
+
+Input:
+      8
+    /   \
+   1     9
+    \     \
+     4    10
+    /
+   3
+K = 9
+Output: 0
+Explanation: K=9. The node that has
+value nearest to K is 9. so the answer
+is 0.
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function minDiff() that takes the root of the BST and an integer K as its input and returns the minimum absolute difference between any node value of the BST and the integer K.
+
+Expected Time Complexity: O(Height of the BST).
+Expected Auxiliary Space: O(Height of the BST).
+
+Constraints:
+1 <= Number of nodes <= 100000
+
+
+
+// { Driver Code Starts
+//Initial Template for Java
+
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+import java.math.*;
+
+class Node  
+{ 
+    int data; 
+    Node left, right; 
+   
+    public Node(int d)  
+    { 
+        data = d; 
+        left = right = null; 
+    } 
+}
+
+class GFG
+{
+    static Node buildTree(String str)
+    {
+        // Corner Case
+        if(str.length() == 0 || str.equals('N'))
+            return null;
+        String[] s = str.split(" ");
+        
+        Node root = new Node(Integer.parseInt(s[0]));
+        Queue <Node> q = new LinkedList<Node>();
+        q.add(root);
+        
+        // Starting from the second element
+        int i = 1;
+        while(!q.isEmpty() && i < s.length)
+        {
+              // Get and remove the front of the queue
+              Node currNode = q.remove();
+        
+              // Get the current node's value from the string
+              String currVal = s[i];
+        
+              // If the left child is not null
+              if(!currVal.equals("N")) 
+              {
+        
+                  // Create the left child for the current node
+                  currNode.left = new Node(Integer.parseInt(currVal));
+        
+                  // Push it to the queue
+                  q.add(currNode.left);
+              }
+        
+              // For the right child
+              i++;
+              if(i >= s.length)
+                  break;
+              currVal = s[i];
+        
+              // If the right child is not null
+              if(!currVal.equals("N")) 
+              {
+        
+                  // Create the right child for the current node
+                  currNode.right = new Node(Integer.parseInt(currVal));
+        
+                  // Push it to the queue
+                  q.add(currNode.right);
+              }
+              
+              i++;
+        }
+    
+        return root;
+    }
+    
+    public static void main(String args[]) throws IOException {
+    
+       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        while(t>0)
+        {
+            String s = br.readLine();
+            Node root = buildTree(s);
+            
+            int k = Integer.parseInt(br.readLine().trim());
+            
+            Solution T = new Solution();
+            System.out.println(T.maxDiff(root,k));
+            t--;
+        }
+    }
+}// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution
+{
+    static int greater(Node root, int k){
+        if(root.data<k && root.right!=null) return greater(root.right, k);
+        if(root.data>=k){
+            if(root.left!=null){
+                int res = greater(root.left, k);
+                if(res>=k) return res;
+            }
+            return root.data;
+        }
+        return k-1;
+    }
+    static int lesser(Node root, int k){
+        if(root.data>k && root.left!=null) return lesser(root.left, k);
+        if(root.data<=k){
+            if(root.right!=null){
+                int res=lesser(root.right, k);
+                if(res<=k) return res;
+            }
+            return root.data;
+        }
+        return k+1;
+    }
+    static int maxDiff(Node  root, int k){
+        int les = k-lesser(root, k);
+        int gre = greater(root, k)-k;
+        if(les>=0 && gre>=0) return Math.min(les, gre);
+        if(les>=0) return les;
+        return gre;
+    }
+}
+

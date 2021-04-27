@@ -1,0 +1,94 @@
+Given a string A and a dictionary of n words B, find out if A can be segmented into a space-separated sequence of dictionary words. 
+
+
+Example 1:
+
+Input:
+n = 12
+B = { "i", "like", "sam", "sung", "samsung", "mobile",
+"ice","cream", "icecream", "man", "go", "mango" }
+A = "ilike"
+Output: 1
+Explanation:The string can be segmented as "i like".
+
+â€‹Example 2:
+
+Input:
+n = 12
+B = { "i", "like", "sam", "sung", "samsung", "mobile",
+"ice","cream", "icecream", "man", "go", "mango" }
+A = "ilikesamsung"
+Output: 1
+Explanation: The string can be segmented as 
+"i like samsung" or "i like sam sung".
+ 
+
+Your Task:
+Complete wordBreak() function which takes a string and list of strings as a parameter and returns 1 if it is possible to break words, else return 0. You don't need to read any input or print any output, it is done by driver code.
+
+
+Expected time complexity: O(s2)
+â€‹Expected auxiliary space: O(s) , where s = length of string A
+
+ 
+
+Constraints:
+1 <= N <= 12
+1 <= s <=1000 , where s = length of string A
+ The length of each word is less than 15.
+
+
+
+import java.io.*;
+import java.util.*;
+public class GfG
+{
+    public static void main(String args[])
+        {
+            Scanner sc = new Scanner(System.in);
+            int t = sc.nextInt();
+            while(t-->0)
+                {
+                    int n;
+                    n = sc.nextInt();
+                    ArrayList<String> arr = new ArrayList<String>();
+                    for(int i = 0;i<n;i++)
+                        {
+                            String p = sc.next();
+                            arr.add(p);
+                        }
+                    String line = sc.next();
+                    Sol obj = new Sol();  
+                    System.out.println(obj.wordBreak(line,arr));  
+                    
+                }
+        }
+}// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Sol
+{
+    static boolean wordBreak(String ch, int s, int n, String sofar, Set<String> set){
+        if(s==n && !sofar.equals("")) return true;
+        int i=s;
+        while(i<n){
+            String sub = ch.substring(s, i+1);
+            if(set.contains(sub)){
+                sofar = sub; break;
+            }i++;
+        }
+        if(i==n) return false;
+        
+        return set.contains(ch.substring(i + 1, n)) ? true : wordBreak(ch, i+1, n, sofar, set);
+        
+    }
+    
+    public static int wordBreak(String str, ArrayList<String> words)
+    {
+        Set<String> set = new HashSet<>();
+        for(String word : words) set.add(word);
+        return wordBreak(str, 0, str.length(), "", set) ? 1 : 0;
+    }
+}

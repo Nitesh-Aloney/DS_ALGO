@@ -1,0 +1,43 @@
+import java.util.*;
+import java.io.*;
+
+public class GFG{
+    static int rand(){ 
+        return (int)(3*Math.random());
+    }
+
+    static int compareUtil(char c1, char c2){
+        if(c1<'c') c1+=26;
+        if(c2<'c') c2+=26;
+        return (c1>c2) ? 1 : (c1<c2) ? -1 : 0;
+    }
+    static int comp(String s1, String s2){
+        int m = 0, n = 0;
+        while(m<s1.length() && n<s2.length()){
+            int res = compareUtil(s1.charAt(m),s2.charAt(n));
+            if(res!=0) return res;
+            else{m++; n++;}
+        }
+        return m==s1.length() ? -1 : 1;
+    }
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        
+        String[] words = {"adhfkshdf", "dfuidh", "zzc", "adhfkshdfkjdfk", "aaaaa", "m"};
+
+        for(int i=0;i<words.length; i++){
+            for(int j=0;j<words.length-i-1;j++){
+                int com = comp(words[j], words[j+1]);
+                if(com==1){
+                    String temp = words[j];
+                    words[j] = words[j+1];
+                    words[j+1] = temp;
+                }
+            }
+        }
+
+        System.out.println(Arrays.toString(words));
+        
+        in.close();
+    }
+}

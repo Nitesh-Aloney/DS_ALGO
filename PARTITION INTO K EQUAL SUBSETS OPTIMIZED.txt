@@ -1,0 +1,63 @@
+// { Driver Code Starts
+import java.util.*;
+
+class Partition_Arr_To_K_Subsets
+{
+	public static void main(String args[])
+	{
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t>0)
+		{
+			int n = sc.nextInt();
+			int a[] = new int[n];
+			for(int i=0;i<n;i++)
+				a[i] = sc.nextInt();
+			int k = sc.nextInt();
+			GfG g = new GfG();
+			if(g.isKPartitionPossible(a,n,k)==true)
+				System.out.println(1);
+			else 
+				System.out.println(0);
+			
+		t--;
+		}
+	}
+}// } Driver Code Ends
+
+
+/*You are required to complete this method */
+class GfG
+{
+    boolean util(int[] a, boolean[] used, int target, int reached, int com, int s){
+        if(com == 0) return true;
+        if(reached == target){
+            return util(a, used, target, 0, com-1, 1);
+        }
+        if(com+1 > a.length-s+1) return false;
+        for(int i=s;i<a.length;i++){
+            if(used[i]) continue;
+            if(reached+a[i] <= target){
+                used[i]=true;
+                if(util(a, used, target, reached+a[i], com, i+1)) return true;
+                used[i]=false;
+            }
+        }
+        return false;
+    }
+    boolean isKPartitionPossible(int a[], int n, int k){
+        if(n<k) return false;
+        int sum = 0, max = a[0];
+        for(int ele:a){
+            sum+=ele;
+            max = Math.max(max, ele);
+        }
+        if(sum%k!=0) return false;
+        if(k==1) return true;
+        int target = sum/k;
+        if(max>target) return false;
+        boolean[] used = new boolean[n];
+        used[0] = true;
+        return util(a, used, target, a[0], k-1, 1);
+    }
+}

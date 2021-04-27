@@ -1,0 +1,108 @@
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+import java.io.*;
+public class Main
+{
+	public static void main(String[] args) {
+	    int[] a = {2, 1, 1, 2, 1};
+	    int n = a.length;
+	    int[] leftCv = new int[n],
+	    rightCv = new int[n],
+	    dp = new int[n];
+	    Arrays.fill(dp, n);
+	    for(int i=0;i<n;i++){
+	        leftCv[i] = Math.max(0, i-a[i]);
+	        rightCv[i] = Math.min(n-1, i+a[i]);
+	    }
+	    
+	    
+	    System.out.println(Arrays.toString(leftCv));
+	    System.out.println(Arrays.toString(rightCv));
+	    System.out.println(Arrays.toString(dp));
+	    System.out.println();
+	    dp[0] = 1;
+	    for(int i=0;i<n;i++){
+	        if(leftCv[i]==0 && rightCv[i]==n-1){
+	            dp[i]=1;
+	            continue;
+	        }
+	        for(int j=0;j<i;j++){
+	            if(rightCv[j]>=leftCv[i] && leftCv[j]==0){
+	                if(dp[i]>dp[j]+1){
+	                    leftCv[i] = 0;
+	                    rightCv[i] = Math.max(rightCv[i], rightCv[j]);
+	                    dp[i] = 1+dp[j];
+	                }
+	            }
+	        }
+	    }
+	    System.out.println(Arrays.toString(leftCv));
+	    System.out.println(Arrays.toString(rightCv));
+	    System.out.println(Arrays.toString(dp));
+	}
+}
+
+
+
+
+
+
+
+
+
+
+//Method 2
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+import java.io.*;
+public class Main
+{
+    static class Data{
+        int left, right;
+        Data(int left, int right){
+            this.left = left;
+            this.right = right;
+        }
+        public String toString(){
+            return "("+this.left+","+this.right+")";
+        }
+    }
+	public static void main(String[] args) {
+	    int[] a = {1, 2, 1};
+	    int n = a.length, i = 0;
+	    Stack<Data> s = new Stack<>();
+	    while(i<n){
+	        int left = Math.max(0, i-a[i]);
+	        int right = Math.min(n-1, i+a[i]);
+	        if(s.isEmpty()){
+	            s.push(new Data(left, right));
+	            i++;
+	            continue;
+	        }
+	        System.out.print(i+" "+left+" "+right+" ---->");
+	        Data ele = s.peek();
+	        if(left-1<=ele.right){
+	            if(left<=ele.left && right>=ele.right){
+	                  s.pop();
+	                  s.push(new Data(left, right));
+	            }
+	            else if(right>ele.right) s.push(new Data(left, right));
+	        }
+	        i++;
+	        System.out.println(s);
+	    }
+	    System.out.println(s);
+	}
+}

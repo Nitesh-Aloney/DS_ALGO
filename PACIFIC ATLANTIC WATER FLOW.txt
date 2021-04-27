@@ -1,0 +1,108 @@
+Given an m x n matrix of non-negative integers representing the height of each unit cell in a continent, the "Pacific ocean" touches the left and top edges of the matrix and the "Atlantic ocean" touches the right and bottom edges.
+
+Water can only flow in four directions (up, down, left, or right) from a cell to another one with height equal or lower.
+
+Find the list of grid coordinates where water can flow to both the Pacific and Atlantic ocean.
+
+Note:
+
+The order of returned grid coordinates does not matter.
+Both m and n are less than 150.
+ 
+
+Example:
+
+Given the following 5x5 matrix:
+
+  Pacific ~   ~   ~   ~   ~ 
+       ~  1   2   2   3  (5) *
+       ~  3   2   3  (4) (4) *
+       ~  2   4  (5)  3   1  *
+       ~ (6) (7)  1   4   5  *
+       ~ (5)  1   1   2   4  *
+          *   *   *   *   * Atlantic
+
+Return:
+
+[[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]] (positions with parentheses in above matrix).
+
+
+Your input
+[[1,2,3],[8,9,4],[7,6,5]]
+stdout
+
+Output
+[[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
+Expected
+[[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
+
+
+
+class Solution {
+    boolean[][] pac, atlan;
+    int r,c;
+    int[] dx = {0, 1, 0, -1}, dy = {1, 0, -1, 0};
+    class Data{
+        int x,y;
+        Data(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+    boolean valid(int x, int y){
+        return x>=0 && y>=0 && x<r && y<c;
+    }
+    public List<List<Integer>> pacificAtlantic(int[][] mat) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(mat.length==0 || mat[0].length==0) return res;
+        r = mat.length;
+        c = mat[0].length;
+        pac = new boolean[r][c];
+        atlan = new boolean[r][c];
+        
+        Queue<Data> pQ = new LinkedList<>(),
+                    aQ = new LinkedList<>();
+        
+        for(int i=0;i<r;i++){
+            pac[i][0] = true; atlan[i][c-1]=true;
+            pQ.add(new Data(i, 0)); aQ.add(new Data(i, c-1));
+        }
+        for(int i=0;i<c;i++){
+            pac[0][i] = true; atlan[r-1][i]=true;
+            pQ.add(new Data(0, i)); aQ.add(new Data(r-1, i));
+        }
+        
+        while(!pQ.isEmpty()){
+            Data ele = pQ.remove();
+            for(int i=0;i<4;i++){
+                int k=dx[i]+ele.x,  l=dy[i]+ele.y;
+                if(valid(k,l) && !pac[k][l] && mat[k][l]>=mat[ele.x][ele.y]){
+                    pac[k][l]=true;
+                    pQ.add(new Data(k,l));
+                }
+            }
+        }
+        
+        while(!aQ.isEmpty()){
+            Data ele = aQ.remove();
+            for(int i=0;i<4;i++){
+                int k=dx[i]+ele.x,  l=dy[i]+ele.y;
+                if(valid(k,l) && !atlan[k][l] && mat[k][l]>=mat[ele.x][ele.y]){
+                    atlan[k][l]=true;
+                    aQ.add(new Data(k,l));
+                }
+            }
+        }
+        
+        for(int i=0;i<r;i++)
+            for(int j=0;j<c;j++)
+                if(pac[i][j] && atlan[i][j]){
+                    List<Integer> temp  = new ArrayList<>();
+                    temp.add(i);    temp.add(j);
+                    res.add(temp);
+                }
+        
+        return res;
+        
+    }
+}

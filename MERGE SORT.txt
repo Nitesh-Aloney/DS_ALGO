@@ -1,0 +1,35 @@
+import java.util.*;
+
+class GFG{   
+    static void mergeSort(int arr[], int l, int r)
+    {
+        System.out.println(l+" to "+r);
+        if(l>=r) return;
+        int m = (l+r)/2;
+        mergeSort(arr, l, m);
+        mergeSort(arr , m+1, r);
+        merge(arr, l, m, r);
+    }
+    static void merge(int arr[], int l, int m, int r){
+        System.out.println("merging from : "+l+" to "+r);
+        int len = r-l+1;
+        int[] temp = new int[len];
+        int i=l,j=m+1,k=0;
+        while(k<len){
+            if(i>m){
+                for(;j<=r;j++) temp[k++]=arr[j];
+            }else if(j>r){
+                for(;i<=m;i++) temp[k++]=arr[i];
+            }else if(arr[i]<arr[j]){
+                temp[k++]=arr[i++];
+            }else{
+                temp[k++]=arr[j++];
+            }
+        }
+        for(i=0;i<len;i++) arr[l++]=temp[i];
+    }
+    public static void main(String[] args){
+        int a[]={5,6,7,8,9,10};
+        System.out.println(ceilC(a, 6, 0, a.length-1));
+    }
+}

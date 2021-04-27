@@ -1,0 +1,72 @@
+Count the number of 2s as digit in all numbers from 0 to n.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains the input integer n.
+
+Output:
+Print the count of the number of 2s as digit in all numbers from 0 to n.
+
+Constraints:
+1<=T<=100
+1<=N<=10^5
+
+Example:
+Input:
+2
+22
+100
+
+Output:
+6
+20
+
+
+import java.util.*;
+import java.lang.*;
+
+class Main
+{
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            long n = sc.nextLong();
+            GfG gfg = new GfG();
+            long res = gfg.count2s(n);
+            System.out.println(res);
+        }
+        
+    }
+}
+// } Driver Code Ends
+
+
+class GfG
+{
+    public static long count2s(long n)
+    {
+        long res = (n%10 >=2) ? (n/10)+1 : (n/10) ;
+        // System.out.println(res);
+        long temp = n/10;
+        long i=1;
+        while(temp != 0){
+            res+=count2sinRangeAtDigit(n, i);
+            // System.out.println("res after "+i+" : "+res);
+            i++;
+            temp/=10;
+        }
+        return res;
+    }
+    
+    public static long count2sinRangeAtDigit(long n, long d)
+    {
+        long mul = (long)Math.pow(10, d), mod = (long)mul*10;
+        long digit = (n%mod)/mul;
+        // System.out.println(digit);
+        if(digit>2) return ((n/mod) + 1)*mul;
+        if(digit==2) return ((n/mod)*mul)+((n%mul)+1);
+        return (n/mod)*mul;
+    }
+}

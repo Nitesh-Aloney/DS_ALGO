@@ -1,0 +1,99 @@
+You are given an array A of size N. The array contains integers and is of even length. The elements of the array represent N coin of values V1, V2, ....Vn. You play against an opponent in an alternating way.
+
+In each turn, a player selects either the first or last coin from the row, removes it from the row permanently, and receives the value of the coin.
+
+You need to determine the maximum possible amount of money you can win if you go first.
+
+Example 1:
+
+Input:
+N = 4
+A[] = {5,3,7,10}
+Output: 15
+Explanation: The user collects maximum
+value as 15(10 + 5)
+Example 2:
+
+Input:
+N = 4
+A[] = {8,15,3,7}
+Output: 22
+Explanation: The user collects maximum
+value as 22(7 + 15)
+Your Task:
+Complete the function maximumAmount() which takes an array arr[] (represent values of N coins) and N as number of coins as a parameter and returns the maximum possible amount of money you can win if you go first.
+
+Expected Time Complexity : O(N*N)
+Expected Auxiliary Space: O(N*N)
+
+Constraints:
+2 <= N <= 100
+1 <= Ai <= 106
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class OptimalStrategy
+{
+    public static void main (String[] args) {
+        
+        //taking input using Scanner class
+        Scanner sc = new Scanner(System.in);
+        
+        //taking total number of testcases
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            //taking number of elements
+            int n = sc.nextInt();
+            int arr[] = new int[n];
+            
+            //inserting the elements
+            for(int i = 0; i < n; i++)
+                arr[i] = sc.nextInt();
+                
+           //calling the countMaximum() method of class solve
+           System.out.println(new solve().countMaximum(arr, n)); 
+        }
+    }
+    
+    
+}// } Driver Code Ends
+
+
+class solve{
+    static long countMaximum(int a[], int n){
+        // Your code here
+        int[][] player = new int[n][n],
+        opponent = new int[n][n];
+        for(int i=0;i<n;i++){
+            player[i][i] = a[i];
+            if(i!=n-1){
+                player[i][i+1] = Math.max(a[i],a[i+1]);
+                opponent[i][i+1] = Math.min(a[i],a[i+1]);
+            }
+        }
+        
+        for(int i = 2; i< n; i++){
+            for(int j=0; j<n-i; j++){
+                int k=i+j;
+                player[j][k] = Math.max(a[j]+opponent[j+1][k], opponent[j][k-1]+a[k]);
+                opponent[j][k] = Math.min(player[j+1][k], player[j][k-1]);
+            }
+        }
+        
+        // for(int i =0 ;i<n;i++){
+        //     System.out.println(Arrays.toString(player[i]));
+        // }
+        // System.out.println();
+        // for(int i =0 ;i<n;i++){
+        //     System.out.println(Arrays.toString(opponent[i]));
+        // }
+        
+        return player[0][n-1];
+    }
+}

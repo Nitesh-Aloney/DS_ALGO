@@ -1,0 +1,86 @@
+Given a string S of length N, find the longest palindromic substring in S. Substring of string S: S[ i . . . . j ] where 0 ≤ i ≤ j < len(S). Palindrome string: A string which reads the same backwards. More formally, S is palindrome if reverse(S) = S. Incase of conflict, return the substring which occurs first ( with the least starting index ).
+ 
+
+Example 1:
+
+Input:
+S = "aaaabbaa"
+Output: "aabbaa"
+Explanation:The longest palindromic sub-string
+present in the given string is "aabbaa".
+ 
+
+Example 2:
+
+Input:
+S = "abcd"
+Output: "a"
+Explanation:The longest palindromic sub-string
+present in the given string is "a". 
+But there are three others also but "a" 
+occurs first.
+
+Your Task:
+You don't need to read input or print anything, printing is done by the driver code, user just needs to complete longestPalindrome() function which takes the string S as a input parameter and return the longest palindromic substring.
+
+Expected Time Complexity: O(N*N)
+Expected Auxiliary Space: O(N*N)
+
+Constraints:
+1 ≤ |S| ≤ 500
+
+
+// { Driver Code Starts
+// Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+
+class LongestPalinSubstring {
+    // Driver program to test above function
+    public static void main(String[] args) throws IOException {
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(System.in));
+        int tc = Integer.parseInt(br.readLine().trim());
+        while (tc-- > 0) {
+            String str = br.readLine().trim();
+            Solution sln = new Solution();
+            System.out.println(sln.longestPalindrome(str));
+        }
+    }
+}// } Driver Code Ends
+
+
+class Solution {
+    public String longestPalindrome(String s){
+        int n = s.length(), max = 1, st=0, e = 0;
+        String ret = s.substring(0,1);
+        int[][] res = new int[n][n];
+        for(int i=0;i<n;i++){
+            res[i][i]=1;
+            if(i+1<n){
+                if(s.charAt(i)==s.charAt(i+1)){
+                    res[i][i+1] = 2;
+                    if(max<2){
+                        st=i;    e=i+1;     max = res[i][i+1];
+                    }
+                }
+            }
+        }
+        for(int i=2;i<n;i++){
+            for(int j=0;j<n-i;j++){
+                int k=j+i;
+                if(s.charAt(j)==s.charAt(k)){
+                    if(res[j+1][k-1]>0){
+                        res[j][k]=2+res[j+1][k-1];
+                    }
+                }
+                else res[j][k]=0;
+                if(res[j][k] > max){
+                    st=j;    e=k;    max = res[j][k];
+                }
+            }
+        }
+        return s.substring(st, e+1);
+    }
+}

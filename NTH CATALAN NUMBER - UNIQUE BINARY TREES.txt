@@ -1,0 +1,19 @@
+import java.util.*;
+
+class GFG{   
+    static int nthCatalanNumber(int n){
+        int[] rec= new int[n+1];
+        rec[0] = 1; rec[1] = 1;
+        for(int i = 2;i<=n;i++){
+            for(int j=0; j<i/2; j++){
+                rec[i]+=2*rec[j]*rec[i-j-1];
+            }
+            if(i%2==1) rec[i]+=rec[i/2]*rec[i/2];
+        }
+        System.out.println(Arrays.toString(rec));
+        return rec[n];
+    }
+    public static void main(String[] args){
+        System.out.println(func(5));
+    }
+}

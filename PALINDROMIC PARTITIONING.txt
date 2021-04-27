@@ -1,0 +1,70 @@
+Given a string str, a partitioning of the string is a palindrome partitioning if every sub-string of the partition is a palindrome. Determine the fewest cuts needed for palindrome partitioning of given string.
+
+
+Example 1:
+
+Input: str = "ababbbabbababa"
+Output: 3
+Explaination: After 3 partitioning substrings 
+are "a", "babbbab", "b", "ababa".
+
+Example 2:
+
+Input: str = "aaabba"
+Output: 1
+Explaination: The substrings after 1
+partitioning are "aa" and "abba".
+
+Your Task:
+You do not need to read input or print anything, Your task is to complete the function palindromicPartition() which takes the string str as input parameter and returns minimum number of partitions required.
+
+
+Expected Time Complexity: O(n*n) [n is the length of the string str]
+Expected Auxiliary Space: O(n*n)
+
+
+Constraints:
+1 ≤ length of str ≤ 500
+
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(in.readLine());
+        while(t-- > 0){
+            String str = in.readLine();
+            Solution ob = new Solution();
+            System.out.println(ob.palindromicPartition(str));
+        }
+    }
+}
+class Solution{
+    private static boolean isPalin(String s){
+        int n = s.length();
+        for(int i=0;i<n/2;i++){
+            if(s.charAt(i)!=s.charAt(n-i-1)) return false;
+        }
+        return true;
+    }
+    static int palindromicPartition(String s){
+        int n = s.length();
+        int[] res = new int[n];
+        Arrays.fill(res, n+1);
+        res[0]=1;
+        for(int i=1;i<n;i++){
+            if(isPalin(s.substring(0,i+1))){
+                res[i]=1;
+                continue;
+            }
+            for(int j=0;j<i;j++){
+                if(isPalin(s.substring(j+1, i+1))) res[i]=Math.min(res[i], res[j]+1);
+            }
+        }
+        return res[n-1]-1;
+    }
+}

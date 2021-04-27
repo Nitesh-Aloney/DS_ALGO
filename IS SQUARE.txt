@@ -1,0 +1,111 @@
+Given four different points in space. Find whether these points can form a square or not. 
+
+Example 1:
+
+Input:
+x1 = 20, y1 = 10, x2 = 10, y2 = 20, 
+x3 = 20, y3 = 20, x4 = 10, y4 = 10 
+Output:
+Yes
+Explanation:
+The points (20,10), (10,20), (20,20),
+(10,10) forms a square.
+Example 2:
+
+Input:
+x1 = 2, y1 = 1, x2 = 10, y2 = 20, 
+x3 = 5, y3 = 6, x4 = 10, y4 = 10 
+Output:
+No
+Explanation:
+The points (2,1), (10,20), (5,6),
+(10,10) doesn't form a square.
+ 
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isSquare() which takes 8 Integers x1, y1, x2, y2, x3, y3, x4, and y4 as input and returns whether these points form a square.
+
+ 
+
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+
+ 
+
+Constraints:
+-103 ≤ x1, y1, x2, y2, x3, y3, x4, y4 ≤ 103
+
+
+
+
+
+
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+            String S[] = read.readLine().split(" ");
+            
+            int x1 = Integer.parseInt(S[0]);
+            int y1 = Integer.parseInt(S[1]);
+            int x2 = Integer.parseInt(S[2]);
+            int y2 = Integer.parseInt(S[3]);
+            int x3 = Integer.parseInt(S[4]);
+            int y3 = Integer.parseInt(S[5]);
+            int x4 = Integer.parseInt(S[6]);
+            int y4 = Integer.parseInt(S[7]);
+
+            Solution ob = new Solution();
+            System.out.println(ob.isSquare(x1,y1,x2,y2,x3,y3,x4,y4));
+        }
+    }
+}// } Driver Code Ends
+//User function Template for Java
+
+class Solution {
+    static class Point implements Comparable<Point>{
+        int x,y;
+        Point(int x, int y){
+            this.x=x; this.y=y;
+        }
+        @Override
+        public int compareTo(Point p){
+            if(p.y > this.y) return -1;
+            return 1;
+        }
+        public String toString(){
+            return "("+this.x+", "+this.y+")";
+        }
+        
+    }
+    static int dist(Point p1, Point p2){
+        return Math.abs((p1.x-p2.x)*(p1.x-p2.x)+(p1.y-p2.y)*(p1.y-p2.y));
+    }
+    static String isSquare(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+        ArrayList<Point> points = new ArrayList<>();
+        Point p1 = new Point(x1,y1);
+        Point p2 = new Point(x2,y2);
+        Point p3 = new Point(x3,y3);
+        Point p4 = new Point(x4,y4);
+        
+        int d2 = dist(p1, p2),
+        d3 = dist(p1,p3),
+        d4 = dist(p1, p4);
+        
+        if(d2 == 0 || d3 == 0 || d4 == 0) return "No";
+        else if(d2==d3 && d4==2*d2 && 2*d2==dist(p2,p3)) return "Yes";
+        else if(d3==d4 && d2==2*d3 && 2*d3==dist(p3,p4)) return "Yes";
+        else if(d4==d2 && d3==2*d4 && 2*d4==dist(p4,p2)) return "Yes";
+        // System.out.println("None satisfied");
+        return "No";
+        
+    }
+};

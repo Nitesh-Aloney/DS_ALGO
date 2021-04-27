@@ -1,0 +1,150 @@
+Given two polynomial numbers represented by a linked list. The task is to complete the  function addPolynomial() that adds these lists meaning adds the coefficients who have same variable powers.
+
+Example 1:
+
+Input:
+LinkedList1:  (1,x2) 
+LinkedList2:  (1,x3)
+Output:
+1x^3 + 1x^2
+Explanation: Since, x2 and x3 both have
+different powers as 2 and 3. So, their
+coefficient can't be added up.
+Example 2:
+
+Input:
+LinkedList1:  (1,x3) -> (1,x2)
+LinkedList2:  (3,x3) -> (4,x2)
+Output:
+4x^3 + 6x^2
+Explanation: Since, x3 has two different
+coefficients as 3 and 1. Adding them up
+will lead to 4x3. Also, x2 has two
+coefficients as 4 and 2. So, adding them
+up will give 6x2.
+Your Task:
+The task is to complete the function addPolynomial() which should add the polynomial with same powers return the required polynomial in decreasing order of the power in the form of a linked list.
+Note: Try to solve the question without using any extra space.
+
+Expected Time Complexity: O(N+M)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= N, M <= 105
+1 <= x, y <= 106
+
+
+// { Driver Code Starts
+import java.util.Scanner;
+import java.io.*;
+class Node{
+    int coeff;
+    int pow;
+    Node next;
+    Node(int a,int b)
+    {
+        coeff=a;
+        pow=b;
+        next=null;
+    }
+}
+class GFG2
+{
+    public static void main(String args[])
+    {
+        Scanner sc=new Scanner(System.in);
+        int t=sc.nextInt();
+        while(t-->0)
+        {
+            int n=sc.nextInt();
+            Node start1=null,cur1=null,start2=null,cur2=null;
+            while(n-->0)
+            {
+                int a=sc.nextInt();
+                int b=sc.nextInt();
+                Node ptr=new Node(a,b);
+                if(start1==null)
+                {
+                    start1=ptr;
+                    cur1=ptr;
+                }
+                else{
+                    cur1.next=ptr;
+                    cur1=ptr;
+                }
+            }
+            n=sc.nextInt();
+            while(n-->0)
+            {
+                int a=sc.nextInt();
+                int b=sc.nextInt();
+                Node ptr=new Node(a,b);
+                if(start2==null)
+                {
+                    start2=ptr;
+                    cur2=ptr;
+                }
+                else{
+                    cur2.next=ptr;
+                    cur2=ptr;
+                }
+            }
+            GFG obj=new GFG();
+            Node sum = obj.addPolynomial(start1,start2);
+            for(Node ptr=sum ; ptr != null; ptr=ptr.next  )
+            {
+                // printing polynomial
+                System.out.print(ptr.coeff + "x^" + ptr.pow);
+                if(ptr.next != null)
+                System.out.print(" + ");
+            }
+            System.out.println();
+        }
+    }
+}// } Driver Code Ends
+
+
+/*class Node{
+    int coeff;
+    int pow;
+    Node next;
+    Node(int a,int b)
+    {
+        coeff=a;
+        pow=b;
+        next=null;
+    }
+}*/
+
+//Print the polynomial formed by adding both LL in the function itself.
+class GFG
+{
+    public static Node addPolynomial(Node p1,Node p2){
+        Node res = new Node(0,0), ptr = res;
+        while(!(p1==null && p2==null)){
+            if(p1==null){
+                ptr.next = p2; break;
+            }else if(p2==null){
+                ptr.next = p1; break;
+            }else{
+                Node temp=null;
+                if(p1.pow>p2.pow){
+                    temp = p1;
+                    p1=p1.next;
+                }else if(p1.pow<p2.pow){
+                    temp = p2;
+                    p2=p2.next;
+                }else{
+                    temp = p1;
+                    temp.coeff+=p2.coeff;
+                    p1=p1.next;
+                    p2=p2.next;
+                }
+                temp.next = null;
+                ptr.next = temp;
+                ptr=ptr.next;
+            } 
+        }
+        return res.next;
+    }
+}

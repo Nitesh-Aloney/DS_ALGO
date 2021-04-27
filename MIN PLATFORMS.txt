@@ -1,0 +1,91 @@
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Driver_class
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        
+        while(t-- > 0)
+        {
+            String str[] = read.readLine().trim().split(" ");
+            int n = Integer.parseInt(str[0]);
+            
+            int arr[] = new int[n];
+            int dep[] = new int[n];
+            
+            str = read.readLine().trim().split(" ");
+            for(int i = 0; i < n; i++)
+              arr[i] = Integer.parseInt(str[i]);
+            str = read.readLine().trim().split(" ");
+            for(int i = 0; i < n; i++)
+                dep[i] = Integer.parseInt(str[i]);
+                
+            System.out.println(new Platform().findPlatform(arr, dep, n));
+        }
+    }
+    
+    
+}
+
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+class Train implements Comparable<Train>{
+    int a, d;
+    Train(int a, int b){
+        this.a = a; this.d = b;
+    }
+    @Override
+    public int compareTo(Train s){
+        return this.a-s.a;
+    }
+    @Override
+    public String toString(){
+        return "("+this.a+","+this.d+")";
+    }
+}
+class Platform
+{
+    static Train convert(int x, int y){
+        int t1 = (x/100)*60 + x%100;
+        int t2 = (y/100)*60 + y%100;
+        if(t2 < t1) t2+=24*60;
+        return new Train(t1, t2);
+    }
+    static int findPlatform(int arr[], int dep[], int n){
+        Train[] rec = new Train[n];
+        for(int i = 0 ; i <n;i++) rec[i]=convert(arr[i],dep[i]);
+        int[] res = new int[n];
+        boolean[] v = new boolean[n];
+        int platforms = 0, k = n;
+        Arrays.sort(rec);
+        while(k>0){
+            int pre = 0;
+            while(pre<n && v[pre]) pre++;
+            if(pre!=n){
+                v[pre]=true;
+                platforms++;
+                k--;
+                int pre_end = rec[pre].d;
+                for(int i = pre+1; i<n;i++){
+                    if(!v[i] && pre_end<rec[i].a){
+                        pre_end=rec[i].d; k--; v[i]=true;
+                    }
+                }
+            }
+        }
+        return platforms;
+    }
+
+
+}
+

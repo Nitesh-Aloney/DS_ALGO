@@ -1,0 +1,70 @@
+Given a positive integer n, generate all possible unique ways to represent n as sum of positive integers.
+
+Example 1:
+
+Input: n = 3
+Output: 3 2 1 1 1 1
+Explanation: For n = 3, 
+{3}, {2, 1} and {1, 1, 1}.
+ 
+
+Example 2:
+
+Input: n = 4 
+Output: â€‹4 3 1 2 2 1 1 1 1 
+Explanation: For n = 4, 
+{4}, {3, 1}, {2, 2}, {2, 1, 1}, {1, 1, 1, 1}.
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            int n = Integer.parseInt(br.readLine().trim());
+            Solution ob = new Solution();
+            ArrayList<ArrayList<Integer>> ans = ob.UniquePartitions(n);
+            for(ArrayList<Integer>i: ans)
+                for(int j: i)
+                    System.out.print(j + " ");
+            System.out.println();
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution
+{
+    void help(int rem, int st, ArrayList<Integer> rec, ArrayList<ArrayList<Integer>> res){
+        if(rem<0) return;
+        else if(rem==0) res.add(rec);
+        else{
+            for(int i=st; i>0; i--){
+                ArrayList<Integer> temp = new ArrayList<Integer>(rec);;
+                temp.add(i);
+                help(rem-i, i, temp, res);
+            }
+        }
+    }
+    public ArrayList<ArrayList<Integer>> UniquePartitions(int n)
+    {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        
+        for(int i=n; i>0; i--){
+            ArrayList<Integer> rec = new ArrayList<Integer>();
+            rec.add(i);
+            help(n-i, i, rec, res);
+        }
+        return res;
+        
+    }
+}

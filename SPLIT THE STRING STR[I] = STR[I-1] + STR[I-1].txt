@@ -1,0 +1,47 @@
+input: 11235813
+output: [1, 1, 2, 3, 5, 8, 13]
+input: 1111223
+output: [1, 11, 12, 23]
+input: 1111213
+output: [11, 1, 12, 13]
+input: 11121114
+output: []
+
+import java.util.*;
+public class GFG {
+    static void furtherSplit(Stack<Integer> s, int st, String str){
+        if(st==str.length()){
+            System.out.println(s);
+            return;
+        }
+        int val_1 = s.pop();
+        int val_2 = s.peek();
+        s.push(val_1);
+        for(int i=st;i<str.length();i++){
+            int val_3 = Integer.parseInt(str.substring(st,i+1));
+            if(val_3 == val_1+val_2){
+                s.push(val_3);
+                furtherSplit(s, i+1, str);
+                s.pop();
+            }
+        }
+    }
+    static void specialSplit(String str){
+        char[] ch = str.toCharArray();
+        Stack<Integer> s = new Stack<>();
+        for(int i=0;i<ch.length;i++){
+            for(int j=0;j<i;j++){
+                s.push(Integer.parseInt(str.substring(0, j+1)));
+                s.push(Integer.parseInt(str.substring(j+1, i+1)));
+                if(i+1<str.length()) furtherSplit(s, i+1, str);
+                s.pop();
+                s.pop();
+            }
+        }
+    }
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        specialSplit(in.next());
+        in.close();
+    }
+}

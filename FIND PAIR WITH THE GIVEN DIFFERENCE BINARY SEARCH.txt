@@ -1,0 +1,39 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int find(int[] a, int s, int e, int key){
+        if(s<=e){
+            int mid = (s+e)/2;
+            if(key == a[mid]) return mid;
+            else if(key<a[mid]) return find(a, s, mid-1, key);
+            else if(key>a[mid]) return find(a, mid+1, e, key);
+        }
+        return -1;
+    }
+	public static void main (String[] args) {
+		//code
+		Scanner in = new Scanner(System.in);
+		int test = in.nextInt();
+		while(test-- > 0){
+		    int n = in.nextInt(), d = in.nextInt();
+		    int[] a = new int[n];
+		    boolean found = false;
+		    for(int i=0;i<n;i++) a[i]=in.nextInt();
+		    Arrays.sort(a);
+		    for(int i=0;i<n;i++){
+		        int pos = find(a, 0, n-1, Math.abs(d-a[i]));
+		      //  System.out.println(Math.abs(d-a[i])+" - "+pos);
+		        if(pos!=i && pos!=-1){
+		            found=true;
+    		        break;
+		        }
+		    }
+		    System.out.println(found ? 1 : -1);
+		}
+		in.close();
+	}
+}

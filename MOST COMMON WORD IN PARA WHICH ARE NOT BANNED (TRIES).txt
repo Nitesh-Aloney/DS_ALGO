@@ -1,0 +1,61 @@
+
+class Solution {
+    Set<String> ban = new HashSet<>();
+    Data res = null;
+    
+    void update(Data data){
+        if(!ban.contains(data.word) && (res==null || data.count>res.count)){
+            res = data;
+        }
+    }
+    
+    boolean valid(char ch){
+        return ((ch>='a' && ch<='z') || (ch<='9' && ch>='0'));
+    }
+    
+    void insert(String str, int i, Node root){
+        if(i==str.length()){
+            root.eow = true;
+            root.size++;
+            System.out.println(new Data(str, root.size));
+            update(new Data(str, root.size));
+            return;
+        }
+        if(root.conns[str.charAt(i)-'a']==null) root.conns[str.charAt(i)-'a']=new Node();
+        insert(str, i+1, root.conns[str.charAt(i)-'a']);
+    }
+    
+    public String mostCommonWord(String para, String[] banned) {
+        for(String word : banned) ban.add(word);
+        Node trie = new Node();
+        para = para.toLowerCase();
+        int i=0;
+        while(i<para.length()){
+            if(!valid(para.charAt(i))){
+                i++; continue;
+            }
+            int j=i+1;
+            while(j<para.length() && valid(para.charAt(j))) j++;
+            insert(para.substring(i,j), 0, trie);
+            // System.out.println("Inserted: "+para.substring(i,j));
+            i=j;
+        }
+        return res.word;
+    }
+}
+class Data{
+    String word;
+    int count;
+    Data(String word, int count){
+        this.word = word;
+        this.count = count;
+    }
+    public String toString(){
+        return "("+this.word+","+this.count+")";
+    }
+}
+class Node{
+    int size;
+    boolean eow;
+    Node[] conns = new Node[26];
+}

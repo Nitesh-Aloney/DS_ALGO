@@ -1,0 +1,55 @@
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int tc = Integer.parseInt(br.readLine().trim());
+        while (tc-- > 0) {
+            String[] inputLine;
+            inputLine = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(inputLine[0]);
+            int[] set = new int[n];
+            inputLine = br.readLine().trim().split(" ");
+            for (int i = 0; i < n; i++) {
+                set[i] = Integer.parseInt(inputLine[i]);
+            }
+            int ans = new Solution().lenghtOfLongestAP(set, n);
+            System.out.println(ans);
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution {
+    int max = 1;
+    int[] a;
+    void util(int start, int prev, int diff, int count){
+        if(max==a.length) return;
+        if(start == a.length){
+            max = Math.max(count, max);
+        }
+        for(int i=start;i<a.length;i++){
+            if(a[i]-prev==diff){
+                util(i+1, a[i], diff, count+1);
+            }
+        }
+    }
+    int lenghtOfLongestAP(int[] set, int n) {
+        a = set;
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                util(j+1, a[j], a[j]-a[i], 2);
+            }
+        }
+        
+        return max;
+    }
+}

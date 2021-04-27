@@ -1,0 +1,35 @@
+reverse the characters of each word in a sentence
+
+
+import java.util.*;
+import java.io.*;
+
+public class GFG{
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        char[] ch = "This is the nitesh and Im very keen to work with your organization".toCharArray();
+        int i=0;
+        while(i<ch.length){
+            while(i<ch.length && ch[i]==' ') i++;
+            
+            int j=i;
+            while(j<ch.length && ch[j]!=' ') j++;
+            j--;
+
+            int st = i, e = j;
+            i = j + 1;
+            while (st < e) {
+                char temp = ch[st];
+                ch[st] = ch[e];
+                ch[e] = temp;
+                st++;
+                e--;
+            }
+        }
+        System.out.println(String.valueOf(ch));
+        in.close();
+    }
+}
+
+OUTPUT:
+sihT si eht hsetin dna mI yrev neek ot krow htiw ruoy noitazinagro

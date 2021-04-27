@@ -1,0 +1,51 @@
+Given a String, find the longest palindromic subsequence
+
+Input:
+The first line of input contains an integer T, denoting no of test cases. The only line of each test case consists of a string S(only lowercase)
+
+Output:
+Print the Maximum length possible for palindromic subsequence.
+
+Constraints:
+1<=T<=100
+1<=|Length of String|<=1000
+ 
+
+Examples:
+Input:
+2
+bbabcbcab
+abbaab
+Output:
+7
+4
+
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static void lps(String s){
+        int n = s.length();
+        int[][] rec = new int[n+1][n+1];
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j<=n; j++){
+                if(s.charAt(i-1) == s.charAt(n-j)) rec[i][j] = 1+rec[i-1][j-1];
+                else rec[i][j] = Math.max(rec[i-1][j], rec[i][j-1]);
+            }
+        }
+        System.out.println(rec[n][n]);
+    }
+	public static void main (String[] args) {
+		//code
+		Scanner in = new Scanner(System.in);
+		int test = in.nextInt();
+		for(int t=0;t<test;t++){
+		    String s = in.next();
+		    lps(s);
+		}
+		in.close();
+	}
+}

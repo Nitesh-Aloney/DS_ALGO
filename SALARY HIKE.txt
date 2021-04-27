@@ -1,0 +1,35 @@
+import java.util.*;
+
+public class GFG {
+    
+    public static void main(String[] args) {
+        int[] a = {1,2,3,6,5,4,3,2,1,2,3,4,5,6};
+        int[] rec = new int[a.length];
+        int min=-1;
+
+        rec[0]=1;
+        for(int i=1;i<a.length;i++){
+            if(a[i]>a[i-1]){
+                rec[i] = rec[i-1]+1;
+            }else{
+                rec[i] = rec[i-1]-1;
+            }
+            if(rec[i] <= 0){
+                min = (min==-1 || rec[min]>rec[i]) ? i : min;
+            }
+        }
+        System.out.println(Arrays.toString(rec));
+        while(min!=-1){
+            int k = min+1, add = 1-rec[min], l = min-1;
+            rec[min] += add;
+            while(k<a.length && a[k]>a[k-1]) rec[k++]+=add;
+            while(l>=0 && a[l]>a[l+1]) rec[l--]+=add;
+            min = -1;
+            for(int i=0;i<rec.length;i++){
+                if(rec[i]<=0) min = (min==-1 || rec[min]>rec[i]) ? i : min;
+            }
+        }
+        
+        System.out.println(Arrays.toString(rec));
+    }
+}

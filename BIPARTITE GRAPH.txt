@@ -1,0 +1,78 @@
+// { Driver Code Starts
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String[] S = br.readLine().trim().split(" ");
+            int V = Integer.parseInt(S[0]);
+            int E = Integer.parseInt(S[1]);
+            ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+            for(int i = 0; i < V; i++){
+                adj.add(new ArrayList<Integer>());
+            }
+            for(int i = 0; i < E; i++){
+                String[] s = br.readLine().trim().split(" ");
+                int u = Integer.parseInt(s[0]);
+                int v = Integer.parseInt(s[1]);
+                adj.get(u).add(v);
+                adj.get(v).add(u);
+            }
+            Solution obj = new Solution();
+            boolean ans = obj.isBipartite(V, adj);
+            if(ans)
+                System.out.println("1");
+            else System.out.println("0");
+       }
+    }
+}// } Driver Code Ends
+
+
+class Data{
+    boolean a;
+    int val;
+    Data(int val, boolean a){
+        this.val = val;
+        this.a = a;
+    }
+}
+class Solution
+{
+    public boolean isBipartite(int n, ArrayList<ArrayList<Integer>> g){
+        Queue<Data> q = new LinkedList<>();
+        boolean[] v = new boolean[n];
+        Set<Integer> a_set = new HashSet<>(),
+                     b_set = new HashSet<>();
+        
+        
+        for(int i=0;i<n;i++){
+            if(v[i]==true) continue;
+            v[i]=true;
+            a_set.add(i);
+            q.add(new Data(i,true));
+            while(!q.isEmpty()){
+                Data ele = q.remove();
+                Set<Integer> sameSet = ele.a ? a_set : b_set,
+                            otherSet = ele.a ? b_set : a_set;
+                             
+                for(int conn : g.get(ele.val)){
+                    if(sameSet.contains(conn)) return false;
+                    otherSet.add(conn);
+                    if(!v[conn]){
+                        v[conn]=true;
+                        q.add(new Data(conn, !ele.a));
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+}

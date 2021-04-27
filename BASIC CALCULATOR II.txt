@@ -1,0 +1,71 @@
+227. Basic Calculator II
+Medium
+
+2274
+
+354
+
+Add to List
+
+Share
+Given a string s which represents an expression, evaluate this expression and return its value. 
+
+The integer division should truncate toward zero.
+
+ 
+
+Example 1:
+
+Input: s = "3+2*2"
+Output: 7
+Example 2:
+
+Input: s = " 3/2 "
+Output: 1
+Example 3:
+
+Input: s = " 3+5 / 2 "
+Output: 5
+ 
+
+Constraints:
+
+1 <= s.length <= 3 * 105
+s consists of integers and operators ('+', '-', '*', '/') separated by some number of spaces.
+s represents a valid expression.
+All the integers in the expression are non-negative integers in the range [0, 231 - 1].
+The answer is guaranteed to fit in a 32-bit integer.
+
+
+
+
+class Solution {
+    private int getPriority(char ch){
+        return (ch=='/' || ch=='*') ? 1 : (ch=='+' || ch=='-') ? 0 : -1;
+    }
+    private int evaluate(int ele2, int ele1, char ch){
+        return ch=='/' ? ele1/ele2 : ch=='*' ? ele1*ele2 : ch=='+' ? ele1+ele2 : ele1-ele2;
+    }
+    public int calculate(String s) {
+        Stack<Integer> nums = new Stack<Integer>();
+        Stack<Character> op = new Stack<>();
+        
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)>='0' && s.charAt(i)<='9'){
+                int sres = 0;
+                while(i<s.length() && s.charAt(i)>='0' && s.charAt(i)<='9'){
+                    sres = sres*10 + (s.charAt(i)-'0');
+                    i++;
+                }
+                nums.push(sres);
+                i--;
+            }else if(s.charAt(i)=='/' || s.charAt(i)=='*' || s.charAt(i)=='+' || s.charAt(i)=='-'){
+                while(!op.isEmpty() && getPriority(op.peek())>=getPriority(s.charAt(i)))
+                    nums.push(evaluate(nums.pop(), nums.pop(), op.pop()));
+                op.push(s.charAt(i));
+            }            
+        }
+        while(nums.size()>1) nums.push(evaluate(nums.pop(), nums.pop(), op.pop()));
+        return nums.pop();
+    }
+}

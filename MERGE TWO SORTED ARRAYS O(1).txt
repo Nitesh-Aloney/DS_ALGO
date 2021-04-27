@@ -1,0 +1,30 @@
+import java.util.*;
+
+public class GFG {
+    static int findMin(int[] b, int target){
+        int res = -1;
+        for(int i=0;i<b.length;i++){
+            if(b[i]<target){
+                res = (res==-1 || b[res] > b[i]) ? i : res;
+            }
+        }
+        return res;
+    }
+    public static void main(String[] args){
+        int[] a = {1,3,6,8}, b = {2,4,7,8,10};
+        int i=0;
+        while(i<a.length){
+            int j=findMin(b, a[i]);
+            if(j!=-1){
+                int temp = a[i];
+                a[i] = b[j];
+                b[j] = temp;
+            }
+            i++;
+        }
+        System.out.println(Arrays.toString(a));
+        Arrays.sort(b);
+        System.out.println(Arrays.toString(b));
+
+    }
+}

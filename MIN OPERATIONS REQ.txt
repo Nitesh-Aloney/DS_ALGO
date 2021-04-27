@@ -1,0 +1,56 @@
+import java.util.*;
+
+class Node{
+    long op;
+    String s;
+    Node(long op, String s){
+        this.op = op; this.s = s;
+    }
+    @Override
+    public String toString(){
+        return "("+this.op+","+this.s+")";
+    }
+}
+class GFG{   
+    static void func(int[] dim){
+        int m = dim.length-1;
+        Node[][] rec = new Node[m][m];
+        for(int i=0;i<m;i++){
+            rec[i][i] = new Node(0l,String.valueOf((char)('A'+i)));
+        }
+        for(int i=0;i<m-1;i++){
+            rec[i][i+1] = new Node((dim[i]*dim[i+1]*dim[i+2]), "("+rec[i][i].s+rec[i+1][i+1].s+")");
+        }
+        for(int i =2;i<m;i++){
+            for(int j = 0; j<m-i; j++){
+                int r = j, c = j+i;
+                int min = r+1;
+                long op = rec[min][c].op + Long.valueOf(dim[r]*dim[min]*dim[c+1]) + rec[r][min-1].op;
+                for(int k = r+2; k<c; k++){
+                    long sop = rec[k][c].op + rec[r][k-1].op + Long.valueOf(dim[r]*dim[k]*dim[c+1]);
+                    if(sop <= op){
+                        op = sop;
+                        min = k;
+                    }
+                }
+                rec[r][c] = new Node(op, "("+rec[r][min-1].s+rec[min][c].s+")");
+            }
+        }
+        
+        for(int i=0;i<m;i++) System.out.println(Arrays.toString(rec[i]));
+        System.out.println(rec[0][m-1].s);
+    }
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        int test = in.nextInt();
+        for(int t = 0; t < test; t++){
+            int n = in.nextInt();
+            int[] mat = new int[n];
+            for(int i =0; i < n; i++){
+                mat[i] = in.nextInt();
+            }
+            func(mat);
+        }
+        in.close();
+    }
+}

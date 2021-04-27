@@ -1,0 +1,87 @@
+Suppose you have N eggs and you want to determine from which floor in a K-floor building you can drop an egg such that it doesn't break. You have to determine the minimum number of attempts you need in order find the critical floor in the worst case while using the best strategy.There are few rules given below. 
+
+An egg that survives a fall can be used again.
+A broken egg must be discarded.
+The effect of a fall is the same for all eggs.
+If the egg doesn't break at a certain floor, it will not break at any floor below.
+If the eggs breaks at a certain floor, it will break at any floor above.
+For more description on this problem see wiki page
+
+Example 1:
+
+Input:
+N = 2, K = 10
+Output: 4
+Example 2:
+
+Input:
+N = 3, K = 5
+Output: 3
+Your Task:
+Complete the function eggDrop() which takes two positive integer N and K as input parameters and returns the minimum number of attempts you need in order to find the critical floor.
+
+Expected Time Complexity : O(N*K)
+Expected Auxiliary Space: O(N*K)
+
+Constraints:
+1<=N<=10
+1<=K<=50
+
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GfG { 
+    
+	public static void main (String[] args) throws IOException  {
+	    
+	    //reading input using BufferedReader class
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		//reading total testcases
+		int t = Integer.parseInt(br.readLine().trim());
+		while(t-->0){
+		    
+		    //reading number of eggs and floors
+		    String inputLine[] = br.readLine().trim().split(" ");
+		    
+		    int n = Integer.parseInt(inputLine[0]);
+		    int k = Integer.parseInt(inputLine[1]);
+		    
+		    //calling eggDrop() method of class
+		    //EggDrop
+		    System.out.println(EggDrop.eggDrop(n, k));
+		}
+	}
+}
+
+
+// } Driver Code Ends
+
+
+class EggDrop 
+{
+    static int[][] dp;
+    static int func(int eggs, int floors){
+        if(dp[eggs][floors]!=-1) return dp[eggs][floors];
+        int res = Integer.MAX_VALUE;
+        if(eggs==0) res = 0;
+        else if(eggs==1 || floors<=1) res = floors;
+        else{
+            for(int i=1;i<=floors;i++){
+                int sres = Math.max(func(eggs-1, i-1), func(eggs, floors-i))+1;
+                if(sres < res) res = sres;
+            }
+        }
+
+        return dp[eggs][floors]=res;
+    }
+    static int eggDrop(int n, int k){
+        dp = new int[n+1][k+1];
+        for(int i=0;i<=n;i++) Arrays.fill(dp[i], -1);
+        return func(n, k);
+    }
+}

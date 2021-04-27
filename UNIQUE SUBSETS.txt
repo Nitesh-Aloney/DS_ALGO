@@ -1,0 +1,87 @@
+Given an array arr[] of integers of size N that might contain duplicates, the task is to find all possible unique subsets.
+
+Example 1:
+
+Input: N = 3, arr[] = {1,2,2}
+Output:(),(1),(1 2),(1 2 2),(2),(2 2)
+Example 2:
+
+Input: N = 4, arr[] = {1,2,3,3}
+Output: (),(1),(1 2),(1 2 3)
+(1 2 3 3),(1 3),(1 3 3),(2),(2 3)
+(2 3 3),(3),(3 3)
+Your Task:
+Your task is to complete the function AllSubsets() which takes the array arr[] and N as input parameters and returns list of all possible unique subsets. 
+
+Expected Time Complexity: O(2N).
+Expected Auxiliary Space: O(2N * X), X = Length of each subset.
+
+Constraints:
+1 ≤ N ≤ 12
+1 ≤ arr[i] ≤ 9
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main (String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int testCases = sc.nextInt();
+		for(int t=0;t<testCases;t++){
+		    int n = sc.nextInt();
+		    int arr[] = new int[n];
+		    for(int i=0;i<n;i++){
+		        arr[i] = sc.nextInt();
+		    }
+		    Arrays.sort(arr);
+		    System.out.print("()");
+		    ArrayList <ArrayList<Integer>> res = new solve().AllSubsets(arr,n);
+		    for (int i = 0; i < res.size (); i++)
+		    {
+		        System.out.print ("(");
+		        for (int j = 0; j < res.get(i).size (); j++)
+		        {
+		            if (j != res.get(i).size()-1)
+		                System.out.print ((res.get(i)).get(j) + " ");
+		            else
+		                System.out.print ((res.get(i)).get(j));
+		        }
+		        System.out.print (")");
+		      
+		    }
+		    System.out.println();
+		}
+	}
+}
+
+class solve{
+    static void func(ArrayList<ArrayList<Integer>> res, 
+                int[] a, int cur, int n, 
+                ArrayList<Integer> sofar){
+        res.add(new ArrayList<>(sofar));
+        boolean[] v = new boolean[10];
+        for(int i=cur;i<n;i++){
+            if(!v[a[i]]){
+                v[a[i]]=true;
+                sofar.add(a[i]);
+                func(res, a, i+1, n, new ArrayList<>(sofar));
+                sofar.remove(new Integer(a[i]));
+            }
+        }
+    }
+    public static ArrayList<ArrayList<Integer>> AllSubsets(int arr[], int n){
+        boolean[] v = new boolean[10];
+        ArrayList<ArrayList<Integer>> res=new ArrayList<>();
+        for(int i=0;i<n;i++){
+            if(!v[arr[i]]){
+                v[arr[i]]=true;
+                ArrayList<Integer> temp = new ArrayList<>();
+                temp.add(arr[i]);
+                func(res, arr, i+1, n, temp);
+            }
+        }
+        return res;
+    }
+}

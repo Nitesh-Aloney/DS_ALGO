@@ -1,0 +1,121 @@
+Given a collection of Intervals, the task is to merge all of the overlapping Intervals.
+
+Example 1:
+
+Input:
+N = 4
+Intervals = {(1,3),(2,4),(6,8),(9,10)}
+Output: 1 4 6 8 9 10
+Explanation: Given intervals: [1,3],[2,4]
+[6,8],[9,10], we have only two overlapping
+intervals here,[1,3] and [2,4]. Therefore
+we will merge these two and return [1,4],
+[6,8], [9,10].
+Example 2:
+
+Input:
+N = 4
+Intervals = {(6,8),(1,9),(2,4),(4,7)}
+Output: 1 9
+Your Task:
+Complete the function overlappedInterval() that takes the list of pairs and N as input parameters and returns sorted list of pairs of intervals after merging.
+
+Expected Time Complexity: O(N*Log(N) ).
+Expected Auxiliary Space: O(1).
+
+Constraints:
+1 ≤ N ≤ 100
+0 ≤ x ≤ y ≤ 1000
+
+
+// { Driver Code Starts
+//Initial Template for Java
+
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+class pair
+{
+	int first;
+	int second;
+	pair(int first, int second)
+	{
+		this.first = first;
+		this.second = second;
+	}
+}
+public class GfG 
+{
+    public static void main(String args[])
+        {
+            Scanner sc = new Scanner(System.in);
+            int t = sc.nextInt();
+            while(t-->0)
+                {
+                    ArrayList<pair> arr = new ArrayList<pair>();
+                    ArrayList<pair> res = new ArrayList<pair>();
+                    int n , x , y, i;
+                    n = sc.nextInt();
+                    for(i=0;i<n;i++)
+                        {
+                            x = sc.nextInt();
+                            y = sc.nextInt();
+                            pair yo = new pair(x,y);
+                            arr.add(yo);
+                        }
+                    
+                    Sol obj = new Sol();
+                    res = obj.overlappedInterval(arr,n);
+        
+        
+                    for(i=0;i<res.size();i++)
+                        System.out.print(res.get(i).first + " " + res.get(i).second + " ");
+                    System.out.println();
+            
+        
+                }
+        }
+}
+
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+
+/*
+class pair
+{
+	int first;
+	int second;
+	pair(int first, int second)
+	{
+		this.first = first;
+		this.second = second;
+	}
+}
+*/
+
+class Sol
+{
+    public static void dis(ArrayList<pair> vec){
+        System.out.print("(");
+        for(pair p : vec) System.out.print("("+p.first+","+p.second+")");
+        System.out.println(")");
+    }
+    public static ArrayList<pair> overlappedInterval(ArrayList<pair> vec, int n) 
+    {
+        Collections.sort(vec, (a, b)->{ return a.first > b.first ? 1 : -1; });
+        // dis(vec);
+        for(int i=0;i<vec.size()-1;){
+            pair curr = vec.get(i), next = vec.get(i+1);
+            if(next.first<=curr.second){
+                vec.get(i).second=Math.max(curr.second, next.second);
+                vec.remove(i+1);
+            }else i++;
+        }
+        return vec;
+    }
+
+}

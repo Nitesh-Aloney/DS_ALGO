@@ -1,0 +1,46 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static void func(int[] a, int n){
+        int[][] max = new int[n][n],
+        min = new int[n][n];
+        for(int i=0;i<n;i++){
+            max[i][i]=Math.max(0, a[i]);
+            min[i][i]=Math.min(0, a[i]);
+        }
+        for(int i=0;i<n;i++){
+            int sum = max[i][i], sub = sum, mins = min[i][i], diff = mins;
+            for(int j=i+1;j<n;j++){
+                sub += a[j];
+                if(sub<0) sub=0;
+                sum=Math.max(sum, sub);
+                max[i][j]=sum;
+                
+                diff += a[j];
+                if(diff>0) diff=0;
+                mins=Math.min(diff, mins);
+                min[i][j]=mins;
+            }
+        }
+        int res = Integer.MIN_VALUE;
+        res = Math.max(res, max[0][n-1]);
+        res = Math.max(res, -1*min[0][n-1]);
+        for(int i=0;i<n-1;i++){
+            res = Math.max(res, Math.max(max[0][i]-min[i+1][n-1], max[i+1][n-1]-min[0][i]));
+        }
+        System.out.println(res);
+    }
+	public static void main (String[] args){
+		Scanner in = new Scanner(System.in);
+		int t = in.nextInt();
+		while(t-- > 0){
+		    int n = in.nextInt();
+		    int[] a = new int[n];
+		    for(int i=0;i<n;i++) a[i]=in.nextInt();
+		    func(a, n);
+		}
+		in.close();
+	}
+}

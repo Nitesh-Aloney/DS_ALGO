@@ -1,0 +1,52 @@
+import java.util.*;
+
+public class GFG {
+    public static void main(String[] args){
+        int[] a = {12, 16, 22, 30, 35, 39, 42, 45, 48, 50, 53, 55, 56};
+        int x = 35, k = 4, diff = 10000000;
+        int ans = 0, l = 0, h = a.length-1;
+        while(l<=h){
+            int m = (l+h)/2;
+            int d = a[m]-x;
+            if(d==0){
+                ans = m;
+                diff = 0;
+                break;
+            }
+            else if(d<0){
+                if(Math.abs(d)<diff){
+                    ans = m;
+                    diff = Math.abs(d);
+                }
+                l = m+1;
+            }else{
+                if(Math.abs(d)<diff){
+                    ans = m;
+                    diff = Math.abs(d);
+                }
+                h = m-1;
+            }
+        }
+        System.out.println(a[ans]);
+        l = ans;
+        h = ans+1;
+        while(k>0){
+            if(a[l]==x) l--;
+            else if(a[h]==x) h++;
+            else{
+                int diff1 = (l>=0) ? Math.abs(a[l]-x) : 10000000,
+                    diff2 = (h<a.length) ? Math.abs(a[h]-x) : 10000000;
+                if(diff1 < diff2){
+                    System.out.print(a[l]+" ");
+                    l--;
+                }else{
+                    System.out.print(a[h]+" ");
+                    h++;
+                }
+                k--;
+            }
+            if(l<0 && h==a.length) break;
+        }
+        System.out.println();
+    }
+}

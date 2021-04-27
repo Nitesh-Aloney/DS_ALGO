@@ -1,0 +1,25 @@
+Given a number N, generate bit patterns from 0 to 2^N-1 such that successive patterns differ by one bit. 
+
+Examples:
+
+Input: N = 2
+Output: 00 01 11 10
+
+Input: N = 3
+Output: 000 001 011 010 110 111 101 100
+
+
+
+static List<String> generateGray(int n){
+        List<String> res = new ArrayList<>();
+        if(n==1){
+            res.add("0");
+            res.add("1");
+            return res;
+        }
+        List<String> temp = generateGray(n-1);
+        n = temp.size();
+        for(int i=0;i<n;i++) res.add("0"+temp.get(i));
+        for(int i=n-1;i>=0;i--) res.add("1"+temp.get(i));
+        return res; 
+    }

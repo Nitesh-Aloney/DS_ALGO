@@ -1,0 +1,56 @@
+Input :[Today is Friday. Tomorrow is Saturday, Yesterday was Thursday]
+Output:[Friday is Today. Saturday is Tomorrow, Thursday was Yesterday]
+
+import java.util.*;
+import java.util.stream.*;
+import java.io.*;
+
+public class GFG{
+    static String func(String sentence){
+        String[] words = sentence.split(" ");
+        int i=0, j =words.length-1;
+        while(i<j){
+            if(words[i].equals(""))i++;
+            else if(words[j].equals(""))j--;
+            else{
+                String temp = words[i];
+                words[i] = words[j];
+                words[j] = temp;
+                i++;    j--;
+            }
+        }
+        String res = "";
+        for(String word : words){
+            res = (res+" "+word).trim();
+        }
+        return res;
+    }
+    public static void main(String[] args){
+        Scanner in = new Scanner(System.in);
+        char[] ch = "This is the nitesh and Im.very keen to work with, your organization".toCharArray();
+        StringBuilder s = new StringBuilder();
+        List<String> sentences = new ArrayList<>();
+        
+        for(int i=0;i<ch.length;i++){
+            if(ch[i]=='.'||ch[i]==','){
+                sentences.add(s.toString().trim());
+                s.delete(0, s.length());
+            }else{
+                s.append(ch[i]);
+            }
+        }
+        if(s.length()>0) sentences.add(s.toString().trim());
+
+        sentences.forEach(System.out::println);
+        System.out.println();
+
+        sentences = sentences.stream()
+                             .map(GFG::func)
+                             .filter(sentence -> sentence.length()>0)
+                             .collect(Collectors.toList());
+                             
+        sentences.forEach(System.out::println);
+        System.out.println();
+        in.close();
+    }
+}

@@ -1,0 +1,66 @@
+class Solution {
+    boolean isDig(Character ch){
+        return (ch>='0' && ch<='9') || ch=='x';
+    }
+    int toInt(String s){
+        if(s.equals("")) return 1;
+        return Integer.parseInt(s);
+    }
+    public String solveEquation(String eq){
+        Stack<Integer> xs = new Stack<>(),
+                       is = new Stack<>();
+        xs.push(0);
+        is.push(0);
+        int i = 0, n = eq.length();
+        while(i<n && eq.charAt(i)!='=') i++;
+        String lhs = eq.substring(0,i), rhs = eq.substring(i+1);
+        i=0;
+        n = lhs.length();
+        while(i<n){
+            char ch = lhs.charAt(i);
+            if(ch=='+' || ch=='-') i++;
+            else{
+                int j=i+1;
+                while(j<n && isDig(lhs.charAt(j))){
+                    j++;
+                }
+                if(i==0 || lhs.charAt(i-1)=='+'){
+                    if(lhs.charAt(j-1)=='x') xs.push(toInt(lhs.substring(i,j-1)));
+                    else is.push(toInt(lhs.substring(i,j)));
+                }else{
+                    if(lhs.charAt(j-1)=='x') xs.push(-1*toInt(lhs.substring(i,j-1)));
+                    else is.push(-1*toInt(lhs.substring(i,j)));
+                }
+                i=j;
+            }
+            if(xs.size()>1) xs.push(xs.pop()+xs.pop());
+            if(is.size()>1) is.push(is.pop()+is.pop());
+        }
+        i=0;
+        n=rhs.length();
+        while(i<n){
+            char ch = rhs.charAt(i);
+            if(ch=='+' || ch=='-') i++;
+            else{
+                int j=i+1;
+                while(j<n && isDig(rhs.charAt(j))){
+                    j++;
+                }
+                if(i==0 || rhs.charAt(i-1)=='+'){
+                    if(rhs.charAt(j-1)=='x') xs.push(-1*toInt(rhs.substring(i,j-1)));
+                    else is.push(-1*toInt(rhs.substring(i,j)));
+                }else{
+                    if(rhs.charAt(j-1)=='x') xs.push(toInt(rhs.substring(i,j-1)));
+                    else is.push(toInt(rhs.substring(i,j)));
+                }
+                i=j;
+            }
+            if(xs.size()>1) xs.push(xs.pop()+xs.pop());
+            if(is.size()>1) is.push(is.pop()+is.pop());
+        }
+        
+        if(xs.peek()==0 && is.peek()==0) return "Infinite solutions";
+        else if(xs.peek()==0) return "No solution";
+        return "x="+(-1*is.peek()/xs.peek());
+    }
+}

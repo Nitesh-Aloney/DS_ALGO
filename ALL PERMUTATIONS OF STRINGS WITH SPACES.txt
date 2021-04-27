@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Per {
+    static String st = "ABCD";
+    static public void func(int s, int e, String x){
+        if(s==e){
+            x+=String.valueOf(st.charAt(s))+")";
+            System.out.print(x);
+        }
+        else{
+            String tem = x + st.substring(s, s+1);
+            func(s+1, e, tem);
+            func(s+1, e, tem +" ");
+        }
+    }
+    public static void main(String[] args) {
+        int l  = st.length();
+        func(0,l-1, "(");
+    }  
+}

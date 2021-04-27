@@ -1,0 +1,61 @@
+import java.util.*;
+
+public class GFG {
+    static int[] fact = new int[11];
+    static{
+        fact[0] = 1;
+        fact[1] = 1;
+        for(int i=2;i<11;i++){
+            fact[i] = i*fact[i-1];
+        }
+    }
+    static int nextEle(int[] mp, int i){
+        // System.out.println(Arrays.toString(mp)+"   "+i);
+        for(int k=i+1;k<26;k++){
+            if(mp[k]>0) return k;
+        }
+        return -1;
+    }
+    static int calculate(int[] mp, char c){
+        int res = 1;
+        mp[c-'a']--;
+        for(int i=0;i<26;i++) res*=fact[mp[i]];
+        mp[c-'a']++;
+        return res;
+    }
+    static String kthPermutation(char[] ch, int rank){
+        int[] mp = new int[26];
+        char[] ret = new char[ch.length];
+        int res=0, i=-1, ind=0, count=ch.length;
+        for(char c : ch) mp[c-'a']++;
+        while(ind<ch.length){
+            i=nextEle(mp, i);
+            if(i==-1){
+                for(i=25;i>=0;){
+                    if(mp[i]==0) i--;
+                    else{
+                        ret[ind++] = (char)(i+'a');
+                        mp[i]--;
+                    } 
+                } 
+                break;
+            }
+            char c = (char)(i+'a');
+            int temp = res + (fact[count-1]/calculate(mp, c));
+            if(temp>=rank){
+                rank-=res;
+                res = 0;
+                ret[ind++] = c;
+                mp[i]--;
+                i=-1;
+                count--;
+            }else{
+                res = temp;
+            }
+        }
+        return String.valueOf(ret);
+    }
+    public static void main(String[] args) {
+        
+    }
+}

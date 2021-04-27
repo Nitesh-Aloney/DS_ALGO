@@ -1,0 +1,58 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int[] fact;
+    static int find(ArrayList<Character> l, char key){
+        for(int i=0;i<l.size();i++){
+            if(l.get(i)==key) return i;
+        }
+        return -1;
+    }
+    static void func(char[] ch, ArrayList<Character> l, int n){
+        int res = 0;
+        for(int i=0;i<n;i++){
+            int pos = find(l, ch[i]);
+            // System.out.println(Arrays.toString(ch)+" - "+l.toString()+" - "+i+" - "+pos+" - "+(n-1-i)+"  -> ");
+            l.remove(new Character(ch[i]));
+            if(pos==0) continue;
+            res=(res+(pos)*fact[n-1-i])%1000003;
+            // System.out.println(res);
+        }
+        System.out.println(res+1);
+    }
+	public static void main (String[] args){
+		Scanner in = new Scanner(System.in);
+		int t = in.nextInt();
+		while(t-- > 0){
+		    char[] ch = in.next().toCharArray();
+		    ArrayList<Character> l = new ArrayList<>();
+		    Set<Character> set = new HashSet<>();
+		    boolean duplicate = false;
+		    for(char c:ch){
+		        l.add(c);
+		        if(!set.add(c)){
+		            duplicate = true;
+		            break;
+		        }
+		    }
+		    if(duplicate){
+		        System.out.println(0);
+		        continue;
+		    }
+		    Collections.sort(l);
+		    
+		    fact = new int[ch.length];
+		    fact[0]=1;
+		    if(ch.length>1){
+		        for(int i=1;i<ch.length;i++) fact[i]=fact[i-1]*i;
+		    }
+		    
+		    func(ch, l ,ch.length);
+		}
+		in.close();
+	}
+}

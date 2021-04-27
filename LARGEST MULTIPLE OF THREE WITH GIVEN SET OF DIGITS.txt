@@ -1,0 +1,47 @@
+import java.util.*;
+
+public class GFG{
+    static void largestMul3(int[] a){
+        int sum = 0, ind1 = -1, ind2 = -1;
+        for(int ele : a) sum+=ele;
+        if(sum%3==0){
+            printArray(a, ind1, ind2);
+        }else if(sum%3==1){
+            for(int i=0;i<a.length;i++){
+                if(a[i]%3==1){
+                    printArray(a, i, i); return;
+                }else if(a[i]%3==2){
+                    if(ind1==-1){
+                        ind1 = i;
+                    }else if(ind2==-1){
+                        ind2 = i;
+                    }
+                }
+            }
+            printArray(a, ind1, ind2);
+        }else{
+            for(int i=0;i<a.length;i++){
+                if(a[i]%3==2){
+                    printArray(a, i, i); return;
+                }else if(a[i]%3==1){
+                    if(ind1==-1){
+                        ind1 = i;
+                    }else if(ind2==-1){
+                        ind2 = i;
+                    }
+                }
+            }            
+            printArray(a, ind1, ind2);
+        }
+    }
+    static void printArray(int[] a, int ind1, int ind2){
+        for(int i=a.length-1;i>=0;i--)
+            if(i!=ind1 && i!=ind2) System.out.print(a[i]);
+        System.out.println();
+    }
+    public static void main(String[] args){
+        int[] a  = {1};
+        Arrays.sort(a);
+        largestMul3(a);
+    }
+}

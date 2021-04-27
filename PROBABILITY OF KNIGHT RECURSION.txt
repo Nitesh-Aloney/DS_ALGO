@@ -1,0 +1,57 @@
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String s = br.readLine().trim();
+            String []S = s.split(" ");
+            int N = Integer.parseInt(S[0]);
+            int start_x = Integer.parseInt(S[1]);
+            int start_y = Integer.parseInt(S[2]);
+            int step = Integer.parseInt(S[3]);
+            Solution ob = new Solution();
+            double ans = ob.findProb(N, start_x, start_y, step);
+            System.out.println(String.format("%.6f", ans));           
+        }
+    }
+}
+// } Driver Code Ends
+
+
+//User function Template for Java
+
+class Solution
+{
+    double prob = 1;
+    int[] r = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    int[] c = { 1, 2, 2, 1, -1, -2, -2, -1 };
+    double util(int[][] b, int x, int y, int left){
+        if(left == 0) return 1.0;
+        else{
+            double valid = 0, res=0;
+            for(int i=0;i<8;i++){
+                int k=r[i]+x;
+                int l=c[i]+y;
+                if(k>=0 && k<b.length && l>=0 && l<b.length){
+                    valid++;
+                    res+=util(b, k, l, left-1)/8.0;
+                }
+            }
+            return res;
+        }
+    }
+    public double findProb(int N, int x, int y, int step)
+    {
+        double res = util(new int[N][N], x, y, step);
+        return res;
+    }
+}

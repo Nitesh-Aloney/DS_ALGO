@@ -1,0 +1,64 @@
+// { Driver Code Starts
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class DriverClass
+{
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            int nov = sc.nextInt();
+            int edg = sc.nextInt();
+            for(int i = 0; i < nov+1; i++)
+                list.add(i, new ArrayList<Integer>());
+            for(int i = 1; i <= edg; i++)
+            {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                list.get(u).add(v);
+            }
+            if(new Solution().isCyclic(list, nov) == true)
+                System.out.println("1");
+            else System.out.println("0");
+        }
+    }
+}// } Driver Code Ends
+
+
+/*Complete the function below*/
+
+/*
+ArrayList<ArrayList<Integer>> adj: to represent graph containing 'v'
+                                    vertices and edges between them
+V: represent number of vertices
+*/
+class Solution {
+    ArrayList<ArrayList<Integer>> g;
+    boolean[] v,s;
+    boolean cyclic(int key){
+        if(s[key]) return true;
+        if(v[key]) return false;
+        v[key]=true;
+        s[key]=true;
+        ArrayList<Integer> conns = g.get(key);
+        for(int conn : conns){
+            if(cyclic(conn)) return true;
+        }
+        s[key]=false;
+        return false;
+    }
+    public boolean isCyclic(int n, ArrayList<ArrayList<Integer>> adj) {
+        g = adj;
+        v = new boolean[n];
+        s = new boolean[n];
+        for(int i = 0; i < n; i++){
+            if(cyclic(i)) return true;
+        }
+        return false;
+    }
+}

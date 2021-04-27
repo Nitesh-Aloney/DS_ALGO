@@ -1,0 +1,84 @@
+Given two numbers M and N, which represents the length and breadth of a paper, the task is to cut the paper into squares of any size and find the minimum number of squares that can be cut from the paper.
+
+Example 1:
+
+Input: M = 36, N = 30
+Output: 5
+Explanation: 
+3 (squares of size 12x12) + 
+2 (squares of size 18x18)
+Example 2:
+
+Input: M = 4, N = 5
+Output: 5
+Explanation: 
+1 (squares of size 4x4) + 
+4 (squares of size 1x1)
+
+Your Task:  
+You don't need to read input or print anything. Complete the function minCut() which takes M and N as input parameters and returns the integer value
+
+Expected Time Complexity: O(M*N)
+Expected Auxiliary Space: O(M*N)
+
+Constraints:
+1 ≤ M, N ≤ 102
+
+
+
+
+
+//Initial Template for Java
+import java.io.*;
+import java.util.*;
+class GfG
+{
+    public static void main(String args[])
+        {
+            Scanner sc = new Scanner(System.in);
+            int t = sc.nextInt();
+            while(t-->0)
+                {
+                    int m = sc.nextInt();
+                    int n = sc.nextInt();
+                    Solution ob = new Solution();
+                    System.out.println(ob.minCut(m,n));
+                }
+        }
+}    // } Driver Code Ends
+
+
+
+class Solution
+{
+    int[][] dp;
+	public int minCut(int l, int b)
+	{
+	    dp = new int[l+1][b+1];
+	    if(dp[l][b]!=0) return dp[l][b];
+	    else{
+	        for(int x = 0 ; x<=l; x++){
+	            for(int y = 0; y<=b; y++){
+	                if(x==0 || y==0) dp[x][y]=0;
+	                else if(x==1) dp[x][y]=y;
+	                else if(y==1) dp[x][y]=x;
+	                else if(x==y) dp[x][y]=1;
+	                else{
+	                    dp[x][y] = x*y;
+            	        for(int i=1; i<=x/2; i++){
+            	            dp[x][y] = Math.min(dp[i][y]+dp[x-i][y], dp[x][y]);
+            	        }
+            	        for(int j=1; j<=y/2; j++){
+            	            dp[x][y] = Math.min(dp[x][j]+dp[x][y-j], dp[x][y]);
+            	        }
+	                }
+	            }
+	        }
+	        
+	       // for(int i = 0 ;i<=l;i++) System.out.println(Arrays.toString(dp[i]));
+	        return dp[l][b];
+	    }
+	    
+	    
+	}
+}

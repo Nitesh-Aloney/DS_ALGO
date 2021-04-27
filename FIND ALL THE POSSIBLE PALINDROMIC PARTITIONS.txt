@@ -1,0 +1,98 @@
+Given a String S, Find all possible Palindromic partitions of the given String.
+ 
+
+Example 1:
+
+Input:
+S = "geeks"
+Output:
+g e e k s
+g ee k s
+Explanation:
+All possible palindromic partitions
+are printed.
+Example 2:
+
+Input:
+S = "madam"
+Output:
+m a d a m
+m ada m
+madam
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function allPalindromicPerms() which takes a String S as input parameter and returns a list of lists denoting all the possible palindromic partitions.
+
+ 
+
+Expected Time Complexity: O(N*2N)
+Expected Auxiliary Space: O(N2), where N is the length of the String
+
+ 
+
+Constraints:
+1 <= |S| <= 20
+
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+            String S = read.readLine();
+
+            Solution ob = new Solution();
+            ArrayList<ArrayList<String>> allPart = ob.getGray(S);
+            
+            for (int i=0; i<allPart.size(); i++)  
+            { 
+                for (int j=0; j<allPart.get(i).size(); j++) 
+                { 
+                    System.out.print(allPart.get(i).get(j) + " "); 
+                } 
+                System.out.println(); 
+            } 
+        }
+    }
+}
+
+class Solution {
+    static ArrayList<ArrayList<String>> res;
+    static Stack<String> sofar = new Stack<>();
+    static Map<String, Boolean> mp = new HashMap<String,Boolean>();
+    static boolean isPalin(String s){
+        if(mp.containsKey(s))  return mp.get(s);
+        int i=0,j=s.length()-1;
+        while(i<j){
+            if(s.charAt(i)!=s.charAt(j)){
+                mp.put(s,false);
+                return false;
+            }i++;j--;
+        }
+        mp.put(s,true);
+        return true;
+    }
+    private static void util(String s, int st){
+        if(st==s.length()){
+            res.add(new ArrayList(sofar));
+        }
+        for(int i=st;i<s.length();i++){
+            String sub = s.substring(st,i+1);
+            if(isPalin(sub)){
+                sofar.push(sub);
+                util(s,i+1);
+                sofar.pop();
+            }
+        }
+    }
+    static ArrayList<ArrayList<String>> getGray(String S) {
+        res = new ArrayList<>();
+        util(S, 0);
+        return res;
+    }
+};

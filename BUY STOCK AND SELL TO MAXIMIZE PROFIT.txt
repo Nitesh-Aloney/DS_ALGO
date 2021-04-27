@@ -1,0 +1,81 @@
+In the stock market, a person buys a stock and sells it on some future date. Given the stock prices of N days in an array A[ ] and a positive integer K, find out the maximum profit a person can make in at-most K transactions. A transaction is equivalent to (buying + selling) of a stock and new transaction can start only when the previous transaction has been completed.
+
+
+Example 1:
+
+Input: K = 2, N = 6
+A = {10, 22, 5, 75, 65, 80}
+Output: 87
+Explaination: 
+1st transaction: buy at 10 and sell at 22. 
+2nd transaction : buy at 5 and sell at 80.
+
+Example 2:
+
+Input: K = 3, N = 4
+A = {20, 580, 420, 900}
+Output: 1040
+Explaination: The trader can make at most 2 
+transactions and giving him a profit of 1040.
+
+Example 3:
+
+Input: K = 1, N = 5
+A = {100, 90, 80, 50, 25}
+Output: 0
+Explaination: Selling price is decreasing 
+daily. So seller cannot have profit.
+
+Your Task:
+You do not need to read input or print anything. Your task is to complete the function maxProfit() which takes the values K, N and the array A[] as input parameters and returns the maximum profit.
+
+
+Expected Time Complexity: O(N*K)
+Expected Auxiliary Space: O(N*K)
+
+
+Constraints:
+1 ≤ N ≤ 500
+1 ≤ K ≤ 200
+1 ≤ A[ i ] ≤ 1000
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(in.readLine());
+        while(t-- > 0)
+        {
+            int K = Integer.parseInt(in.readLine());
+            int N = Integer.parseInt(in.readLine());
+            String input_line[] = in.readLine().trim().split("\\s+");
+            int A[]= new int[N];
+            for(int i = 0; i < N; i++)
+                A[i] = Integer.parseInt(input_line[i]);
+
+            Solution ob = new Solution();
+            System.out.println(ob.maxProfit(K, N, A));
+        }
+    }
+}
+class Solution{
+    static int maxProfit(int k, int n, int price[])
+    {
+        int[][] profit = new int[k+1][n];
+        for(int t=1;t<=k;t++){
+            int max = Integer.MIN_VALUE;
+            for(int p=1;p<n;p++){
+                max = Math.max(max, profit[t-1][p-1]-price[p-1]);
+                // System.out.println(max);
+                profit[t][p]= Math.max(max+price[p], profit[t][p-1]);
+            }
+        }
+        // for(int t=1;t<=k;t++) System.out.println(Arrays.toString(profit[t]));
+        return profit[k][n-1];
+    }
+}

@@ -1,0 +1,96 @@
+Given a dictionary of distinct words and an M x N board where every cell has one character. Find all possible words from the dictionary that can be formed by a sequence of adjacent characters on the board. We can move to any of 8 adjacent characters, but a word should not have multiple instances of the same cell.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains an integer x denoting the number of words in the dictionary. The next line contains x space-separated strings denoting the contents of the dictionary. The next line contains two integers M and N denoting the size of the boggle. M lines follow each containing N space-separated characters.
+
+Output:
+For each test case in a new line print the space-separated sorted distinct words of the dictionary which could be formed from the boggle. If no word can be formed print -1.
+
+Your Task:
+Complete the function boggle that takes the MxN board and dictionary as input and returns a list of words that exist on the board. 
+
+Constraints:
+1 <= T <= 200
+1 <= X <= 15
+1 <= M,N <= 50
+1 <= length of word <= 60
+
+Example:
+Input:
+1
+4
+GEEKS FOR QUIZ GO
+3 3
+G I Z 
+U E K 
+Q S E
+Output:
+GEEKS QUIZ
+
+import java.util.*;
+
+class Data{
+    int x,y;
+    Data(int a, int b){
+        x=a;    y=b;
+    }
+    public String toString(){
+        return "("+this.x+","+this.y+")";
+    }
+}
+public class GFG {
+    static LinkedList<Data>[] mp = new LinkedList[26];
+    static{
+        for(int i=0;i<26;i++) mp[i] = new LinkedList<Data>();
+    }
+    static char[][] grid;
+    static boolean[][] v;
+    
+    static boolean adj(Data a, Data b){
+        return Math.max(Math.abs(a.x-b.x), Math.abs(a.y-b.y))<=1;
+    }
+
+    static boolean dfs(Data a, int i, char[] ch){ 
+        // System.out.print(ch[i-1]+": "+a+"  ");
+        if(i==ch.length) return true;       
+        boolean res = false;
+        for(Data b : mp[ch[i]-'a']){
+            if(!v[b.x][b.y] && adj(a, b)){
+                v[b.x][b.y] = true;
+                if(dfs(b, i+1, ch)) res = true;
+                v[b.x][b.y] = false;
+                if(res) break;
+            }
+        }
+        return res;
+    }
+
+    static void solve(){
+        char[][] boggle = {{'a','c','b'},{'b','d','e'},{'c','a','d'}};
+        grid = boggle;
+        v = new boolean[grid.length][grid[0].length];
+        String[] words = {"addc","acd","cc"};
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                mp[grid[i][j]-'a'].add(new Data(i,j));
+            }
+        }
+        // System.out.println(Arrays.toString(mp));
+        for(String word : words){
+            char[] ch = word.toCharArray();
+            boolean found = false;
+            for(Data a : mp[ch[0]-'a']){
+                if(!v[a.x][a.y])
+                    v[a.x][a.y] = true;
+                    if(dfs(a, 1, ch)) found = true;
+                    v[a.x][a.y] = false;
+                    if(found) break;
+            }
+            // System.out.println();
+            if(found) System.out.println(word);
+        }        
+    }
+    public static void main(String[] args){
+        solve();
+    }
+}

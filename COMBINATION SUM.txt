@@ -1,0 +1,123 @@
+Given an array of integers and a sum B, find all unique combinations in the array where the sum is equal to B. The same number may be chosen from the array any number of times to make B.
+
+Note:
+        1. All numbers will be positive integers.
+        2. Elements in a combination (a1, a2, …, ak) must be in non-descending order. (ie, a1 ≤ a2 ≤ … ≤ ak).
+        3. The combinations themselves must be sorted in ascending order.
+
+Example 1:
+
+Input:
+N = 4
+arr[] = {7,2,6,5}
+B = 16
+Output:
+(2 2 2 2 2 2 2 2)
+(2 2 2 2 2 6)
+(2 2 2 5 5)
+(2 2 5 7)
+(2 2 6 6)
+(2 7 7)
+(5 5 6)
+
+Example 2:
+
+Input:
+N = 11
+arr[] = {6,5,7,1,8,2,9,9,7,7,9}
+B = 6
+Output: (1 1 1 1 1 1)
+(1 1 1 1 2)
+(1 1 2 2)
+(1 5)
+(2 2 2)
+(6)
+
+// { Driver Code Starts
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Driverclass
+{
+    static ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+    public static void main (String[] args)throws IOException {
+        
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine());
+        
+        while(t-- >0)
+        {
+            String str[] = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(str[0]);
+            ArrayList<Integer> list = new ArrayList<>();
+            str = br.readLine().trim().split(" ");
+            for(int i = 0; i <n ;i++)
+                list.add(Integer.parseInt(str[i]));
+            str = br.readLine().trim().split(" ");    
+            int sum = Integer.parseInt(str[0]);
+            
+            res = new Sum().combinationSum(list, sum);
+            if (res.size() == 0) {
+    			System.out.print("Empty");
+    		}
+ 
+    		// Print all combinations stored in res.
+    		for (int i = 0; i < res.size(); i++) {
+    			if (res.size() > 0) {
+    				System.out.print("(");
+    				List<Integer> ij = res.get(i);
+    				for (int j = 0; j < ij.size(); j++) {
+    				    
+    					System.out.print(ij.get(j));
+    					if(j < ij.size()-1)
+    					 System.out.print(" ");
+    				}
+    				System.out.print(")");
+    			}
+    		}
+    		System.out.println();
+    		res.clear();
+	    }
+    }
+    
+}
+
+// } Driver Code Ends
+
+
+class Sum
+{
+    static ArrayList<ArrayList<Integer>> result;
+    static void func(int rem, int s, int n, ArrayList<Integer> A, ArrayList<Integer> rec){
+        if(rem < 0 || s>=n) return;
+        if(rem == 0){
+            result.add(rec);
+            return;
+        }
+        else{
+            for(int i = s; i < n; i++){
+                int ele=A.get(i);
+                if(ele<=rem){
+                    ArrayList<Integer> temp = new ArrayList<Integer>(rec);
+                    temp.add(ele);
+                    func(rem-ele, i, n, A, temp);
+                }
+            }
+        }
+    }
+    static ArrayList<ArrayList<Integer>> combinationSum(ArrayList<Integer> A, int B)
+    {
+        result = new ArrayList<>();
+        TreeSet<Integer> t = new TreeSet<>(A);
+        A.clear();
+        for(Integer e : t) A.add(e);
+        int n = A.size();
+        for(int i=0; i<n; i++){
+            ArrayList<Integer> temp = new ArrayList<Integer>();
+            temp.add(A.get(i));
+            func(B-A.get(i), i, n, A, temp);
+        }
+        return result;
+    }
+}

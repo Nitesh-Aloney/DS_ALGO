@@ -1,0 +1,141 @@
+Given a dictionary of distinct words and an M x N board where every cell has one character. Find all possible words from the dictionary that can be formed by a sequence of adjacent characters on the board. We can move to any of 8 adjacent characters, but a word should not have multiple instances of the same cell.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains an integer x denoting the number of words in the dictionary. The next line contains x space-separated strings denoting the contents of the dictionary. The next line contains two integers M and N denoting the size of the boggle. M lines follow each containing N space-separated characters.
+
+Output:
+For each test case in a new line print the space-separated sorted distinct words of the dictionary which could be formed from the boggle. If no word can be formed print -1.
+
+Your Task:
+Complete the function boggle that takes the MxN board and dictionary as input and returns a list of words that exist on the board. 
+
+Constraints:
+1 <= T <= 200
+1 <= X <= 15
+1 <= M,N <= 50
+1 <= length of word <= 60
+
+Example:
+Input:
+1
+4
+GEEKS FOR QUIZ GO
+3 3
+G I Z 
+U E K 
+Q S E
+Output:
+GEEKS QUIZ
+
+import java.io.*;
+import java.util.*;
+
+class GFG
+{
+    public static void main(String args[])
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while(t>0)
+        {
+            int x = sc.nextInt();
+            String[] dictionary = new String[x];
+            for(int i=0;i<x;i++)
+            {
+                dictionary[i] = sc.next();
+            }
+            
+            int m = Integer.parseInt(sc.next());
+            int n = Integer.parseInt(sc.next());
+            
+            char board[][] = new char[m][n];
+            for(int i=0;i<m;i++)
+            {
+                for(int j=0;j<n;j++)
+                {
+                    board[i][j] = sc.next().charAt(0);
+                }
+            }
+            
+            Solution T = new Solution();
+            String[] ans = T.wordBoggle(board, dictionary);
+            
+            if(ans.length == 0) System.out.println("-1");
+            else
+            {
+                Arrays.sort(ans);
+                for(int i=0;i<ans.length;i++)
+                {
+                    System.out.print(ans[i] + " ");
+                }
+                System.out.println();
+            }
+            
+            t--;
+        }
+    }
+}
+
+class Solution
+{
+    Map<String, Integer> words = new HashMap<>();
+    Set<String> pos = new HashSet<>(),
+    s = new TreeSet<>();
+    int[] r={-1,-1,0,1,1,1,0,-1};
+    int[] c={0,1,1,1,0,-1,-1,-1};
+    // void display(char b[][], String tofar){
+    //     System.out.println("tofar : "+tofar);
+    //     for(char[] ch : b){
+    //         System.out.println(Arrays.toString(ch));
+    //     }
+    // }
+    public void func(char b[][], int x, int y, int m, int n, String tofar){
+        if(words.containsKey(tofar)){
+            s.add(tofar);
+        }
+        char tem = b[x][y];
+        b[x][y]='-';
+        // display(b, tofar);
+        for(int i=0;i<8;i++){
+            int k = x+r[i], l = y+c[i];
+            if(k>=0 && k<m && l>=0 && l<n && b[k][l]!='-'){
+                String temp = tofar+String.valueOf(b[k][l]);
+                if(pos.contains(temp)){
+                    func(b, k, l, m, n, temp);
+                }
+            }
+        }
+        b[x][y]=tem;
+    }
+    public String[] wordBoggle(char b[][], String[] dictionary){
+        for(String word : dictionary){
+            if(!words.containsKey(word)) words.put(word, 0);
+            words.put(word, words.get(word)+1);
+            int n = word.length();
+            for(int i=1;i<=n;i++) pos.add(word.substring(0, i));
+        }
+        // System.out.println(words+"\n"+pos);
+        int m = b.length, n = b[0].length;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                String sub = String.valueOf(b[i][j]);
+                if(pos.contains(sub)){
+                    func(b, i, j, m, n, sub);
+                }
+            }
+        }
+        int l = 0;
+        for(String ele:s){
+            l+=words.get(ele);
+        }
+        String[] res = new String[l];
+        int i = 0;
+        for(String ele : s){
+            int rep = words.get(ele);
+            while(rep-- > 0){
+                res[i++]=ele;
+            }
+        }
+        return res;
+    }
+}

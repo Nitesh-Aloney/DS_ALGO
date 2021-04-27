@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Node{
+    int data;
+    Node left, right;
+    Node(int data){
+        this.data= data;
+    }
+}
+public class GFG {
+    static class Pair implements Comparable<Pair>{
+        int val,ind;
+        Pair(int val, int ind){
+            this.val = val; this.ind = ind;
+        }
+        @Override
+        public int compareTo(Pair p){
+            return this.val-p.val;
+        }
+        public String toString(){
+            return "("+this.val+","+this.ind+")";
+        }
+    }
+    public static void main(String[] args){
+        int[] a = {5,4,93,2,72,3,61,8,1};
+        Pair[] arr = new Pair[a.length];
+        for(int i=0;i<a.length;i++) arr[i]=new Pair(a[i],i);
+
+        int ans = 0;
+        System.out.println("Before sort: "+Arrays.toString(arr));
+        Arrays.sort(arr);
+        System.out.println("After sort: "+Arrays.toString(arr));
+        for(int i=0;i<a.length;i++){
+            if(arr[i].ind==i) continue;
+            else{
+                Pair temp = arr[arr[i].ind];
+                arr[arr[i].ind] = arr[i];
+                arr[i] = temp;
+            }
+            if(arr[i].ind!=i) i--;
+            ans++;
+        }
+        System.out.println("After Operations: "+Arrays.toString(arr));
+        System.out.println("Min number of swaps: "+ans);
+    }
+}

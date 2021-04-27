@@ -1,0 +1,32 @@
+import java.util.*;
+
+public class GFG {
+    static int count(int[] mp){
+        int max = 0, total = mp[0];
+        for(int i=1;i<26;i++) {total+=mp[i]; if(mp[max]<mp[i]) max = i;}
+        return total-mp[max];
+    }
+    public static void main(String[] args) {
+        char[] ch = "abcdefgh".toCharArray();
+        int i=0,j=0, res, k = 3;
+        int[] mp = new int[26];
+        for(j=0;j<=Math.min(ch.length, k);j++) mp[ch[j]-'a']++;
+        j--;
+        res=Math.min(k+1, ch.length);
+        while(i<ch.length){
+            int diff = count(mp);
+            if(diff <= k){                             
+                res = Math.max(res, j-i+1);
+                j++;
+                if(j<ch.length){               
+                    mp[ch[j]-'a']++;
+                }
+            }else{
+                mp[ch[i]-'a']--;
+                i++;
+            }
+            if(j==ch.length) break;
+        }
+        System.out.println(res);
+    }
+}

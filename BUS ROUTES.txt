@@ -1,0 +1,137 @@
+You are given an array routes representing bus routes where routes[i] is a bus route that the ith bus repeats forever.
+
+For example, if routes[0] = [1, 5, 7], this means that the 0th bus travels in the sequence 1 -> 5 -> 7 -> 1 -> 5 -> 7 -> 1 -> ... forever.
+You will start at the bus stop source (You are not on any bus initially), and you want to go to the bus stop target. You can travel between bus stops by buses only.
+
+Return the least number of buses you must take to travel from source to target. Return -1 if it is not possible.
+
+ 
+
+Example 1:
+
+Input: routes = [[1,2,7],[3,6,7]], source = 1, target = 6
+Output: 2
+Explanation: The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.
+Example 2:
+
+Input: routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]], source = 15, target = 12
+Output: -1
+ 
+
+Constraints:
+
+1 <= routes.length <= 500.
+1 <= routes[i].length <= 105
+All the values of routes[i] are unique.
+sum(routes[i].length) <= 105
+0 <= routes[i][j] < 106
+0 <= source, target < 106
+
+
+class Solution {
+    public int numBusesToDestination(int[][] routes, int source, int target) {        
+        int min=1000000;
+        Map<Integer, ArrayList<Data>> g = new TreeMap<>();
+        for(int[] route : routes){
+            for(int i=0;i<route.length;i++)
+                for(int j =0;j<route.length;j++){
+                    if(route[i]==route[j]) continue;
+                    if(!g.containsKey(route[i])) g.put(route[i], new ArrayList<>());
+                    g.get(route[i]).add(new Data(route[j],100000));
+                }                    
+        }
+        
+        Queue<Data> q = new LinkedList<>();
+        q.add(new Data(source, 0));
+        while(!q.isEmpty()){
+            Data ele = q.remove();
+            if(ele.x==target) min = Math.min(min, ele.dis); 
+            if(!g.containsKey(ele.x)) continue;
+            ArrayList<Data> conn = g.get(ele.x);
+            for(Data con : conn){
+                if(con.dis > 1+ele.dis){
+                    con.dis = 1+ele.dis;
+                    q.add(new Data(con.x, ele.dis+1));
+                }
+            }
+        }
+        
+        return min==1000000 ? -1 : min;
+    }
+}
+
+class Data{
+    int x, dis;
+    Data(int x, int dis){
+        this.x = x; this.dis=dis;
+    }
+    public String toString(){
+        return "("+this.x+","+this.dis+")";
+    }
+}
+
+
+//approach 2
+class Solution {
+    public int numBusesToDestination(int[][] routes, int source, int target) { 
+        if(source==target) return 0;      
+        
+        int n = routes.length;
+        boolean s  =false, d = s;
+        int[] dis = new int[n];
+        Queue<Integer> q = new LinkedList<Integer>();
+        ArrayList<ArrayList<Integer>> g = new ArrayList<>();
+        ArrayList<Integer> dest = new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            g.add(new ArrayList<>());
+            dis[i] = 1000000;
+            Arrays.sort(routes[i]);
+        }            
+        
+        for(int i=0;i<n;i++){
+            if(Arrays.binarySearch(routes[i], source) >=0){
+                dis[i]=0;  q.add(i);   s = true;
+            }
+            if(Arrays.binarySearch(routes[i], target) >=0){
+                if(dis[i]==0) return 1; 
+                d=true; dest.add(i);
+            }
+            
+            for(int j=i+1;j<n;j++){
+                if(intersect(routes[i], routes[j])){
+                    g.get(i).add(j);
+                    g.get(j).add(i);
+                }
+            }
+        }
+        
+        if(!s || !d) return -1;
+        
+        while(!q.isEmpty()){
+            int ele = q.remove();
+            for(int conn : g.get(ele)){
+                if(dis[ele]+1<dis[conn]){
+                    dis[conn] = dis[ele]+1;
+                    q.add(conn);
+                }
+            }
+        }
+        
+        int minBuses = 1000000;
+        for(int des : dest){
+            minBuses = Math.min(minBuses, dis[des]);
+        }
+        
+        return minBuses==1000000 ? -1 : minBuses+1;
+        
+    }
+    boolean intersect(int[] A, int[] B) {
+        int i = 0, j = 0;
+        while (i < A.length && j < B.length) {
+            if (A[i] == B[j]) return true;
+            if (A[i] < B[j]) i++; else j++;
+        }
+        return false;
+    }
+}

@@ -1,0 +1,79 @@
+Given an integer n, your task is to complete the function convertToRoman which prints the corresponding roman number of n. Various symbols and their values are given below.
+
+I 1
+V 5
+X 10
+L 50
+C 100
+D 500
+M 1000
+
+ 
+
+Example 1:
+
+Input:
+n = 5
+Output: V
+ 
+
+Example 2:
+
+Input:
+n = 3
+Output: III
+ 
+
+Your Task:
+Complete the function convertToRoman() which takes an integer N as input parameter and returns the equivalent roman. 
+
+ 
+
+Expected Time Complexity: O(log10N)
+Expected Auxiliary Space: O(log10N * 10)
+
+
+// { Driver Code Starts
+import java.util.Scanner;
+import java.util.*;
+
+
+class NoToRoman
+{
+	public static void main(String args[])
+	{
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t>0)
+		{
+			int N = sc.nextInt();
+			
+			GfG g = new GfG();
+			System.out.println (g.convertToRoman(N));
+			t--;
+		}
+	}
+}// } Driver Code Ends
+
+
+/*you are required to complete this function*/
+class GfG
+{
+    int[] num = {1,4,5,9,10,40,50,90,100,400,500,900,1000};
+    String[] sym = {"I","IV","V","IX","X","XL","L","XC","C","CD","D","CM","M"};
+    int find(int k){
+        for(int i=12;i>=0;i--){
+            if(num[i]<=k) return i;
+        }
+        return -1;
+    }
+    String convertToRoman(int n){
+        String res = "";
+        while(n>0){
+            int ind = find(n);
+            n-=num[ind];
+            res+=sym[ind];
+        }
+        return res;
+    }
+}

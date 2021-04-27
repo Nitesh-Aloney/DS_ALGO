@@ -1,0 +1,110 @@
+Given a linked list, the task is to complete the function maxPalindrome() which returns an integer denoting  the length of the longest palindrome list that exist in the given linked list.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. The first line of each test case contains an integer N denoting the size of the linked list . Then in the next line are N space separated values of the given linked list.
+
+Output:
+For each test case output will be the required max length of the palindrome present in the given linked list.
+
+User Task:
+The task is to complete the function maxPalindrome() which should count the length of longest palindrome in the given list and return it.
+
+Constraints:
+1 <= T <= 100
+1 <= N <= 100
+
+Example:
+Input:
+2
+7
+2 3 7 3 2 12 24
+5
+12 4 4 3 14
+
+Output:
+5
+2
+
+Explanation:
+Testcase 1: 2 -> 3 -> 7 -> 3 -> 2 is the linked list whose nodes leads to a palindrome as 2 3 7 3 2.
+
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.lang.Math;
+class Node{
+	int data;
+	Node next;
+	Node(int d){
+		data=d;
+		next=null;
+	}
+}
+class PalindromeLL{
+	public static void main(String[] args){
+		Scanner sc=new Scanner(System.in);
+		int t=sc.nextInt();
+		while(t-->0){
+			int n=sc.nextInt();
+			Node head=null;
+			head=insert(head,sc.nextInt());
+			for(int i=1;i<n;i++)
+				insert(head,sc.nextInt());
+			GfG g=new GfG();
+			System.out.println(g.maxPalindrome(head));
+		}
+	}
+	public static Node insert(Node head,int val){
+		if(head==null)
+			return new Node(val);
+		head.next=insert(head.next,val);
+		return head;
+	}
+	/*public static void print(Node head){
+		while(head!=null){
+			System.out.println(head.data);
+			head=head.next;
+		}
+	}*/
+}// } Driver Code Ends
+
+
+/*Complete the function below
+Node is as follows:
+class Node{
+	int data;
+	Node next;
+	Node(int d){
+		data=d;
+		next=null;
+	}
+}*/
+class GfG
+{
+        static boolean check(ArrayList<Integer> s){
+            int n = s.size();
+            for(int i=0;i<n/2;i++) if(s.get(i)!=s.get(n-1-i)) return false;
+            return true;
+        }
+        public static int maxPalindrome(Node head){
+            if(head==null) return 0;
+            int ans = 1;
+            Node ptr=head;
+            while(ptr!=null){
+                Node temp = ptr.next, nxt = ptr.next;
+                ArrayList<Integer> s = new ArrayList<>();
+                s.add(ptr.data);
+                while(temp!=null){
+                    s.add(temp.data);
+                    if(temp.data==ptr.data) if(check(s)){
+                            nxt = temp.next;    
+                            ans = Math.max(ans, s.size());
+                        }
+                    temp=temp.next;
+                }
+                ptr=nxt;
+            }
+            return ans;
+        }
+}

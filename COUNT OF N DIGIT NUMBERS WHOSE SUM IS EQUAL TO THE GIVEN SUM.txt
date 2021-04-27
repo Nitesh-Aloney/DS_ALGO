@@ -1,0 +1,69 @@
+Given two integers ‘n’ and ‘sum’, find the count of all n digit numbers whose sum of digits is ‘sum’. Leading 0’s are not counted as digits. 
+
+
+Example 1:
+
+Input: n = 2, sum = 2
+Output: 2
+Explaination: 
+The 2 digit numbers are 11 and 20.
+
+Example 2:
+
+Input: n = 1, sum = 10
+Output: -1
+Explaination: 
+We cannot get sum as 10 from a single digit.
+
+Your Task:
+You do not need to read input or print anything. Your task is to complete the function countWays() which takes the value n and sum as input parameters and returns the number of possible ways modulo 109+7. If there is no possible way then it returns -1.
+
+
+Expected Time Complexity: O(n*sum)
+Expected Auxiliary Space: O(n*sum)
+
+
+Constraints:
+1 ≤ n ≤ 102
+1 ≤ sum ≤ 103
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(in.readLine());
+        while(t-- > 0){
+            String in_line[] = in.readLine().trim().split("\\s+");
+            int n = Integer.parseInt(in_line[0]);
+            int Sum = Integer.parseInt(in_line[1]);
+            
+            Solution ob = new Solution();
+            System.out.println(ob.countWays(n, Sum));
+        }
+    }
+}
+
+class Solution{
+    static long countWays(int n, int sum){
+        int[][] rec = new int[n][sum+1];
+        for(int i=0;i<n;i++){
+            for(int j=1;j<=sum;j++){
+                if(i==0 && j<=9){
+                    rec[i][j] = 1;
+                }else if(i==0){
+                    continue;
+                }else{
+                    for(int k=0;k<=9;k++){
+                        if(j-k>=0) rec[i][j]= (rec[i][j]+rec[i-1][j-k])%1000000007;
+                    }
+                }
+            }
+        }
+        // for(int i=0;i<n;i++) System.out.println(Arrays.toString(rec[i]));
+        return rec[n-1][sum]>0 ? rec[n-1][sum] : -1;
+    }
+}

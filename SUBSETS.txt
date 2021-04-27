@@ -1,0 +1,53 @@
+Given an array of integers that might contain duplicates, return all possible subsets.
+Note:
+
+        Elements in a subset must be in non-descending order.
+        The solution set must not contain duplicate subsets.
+        The subsets must be sorted lexicographically.
+
+Example:
+Input:
+2
+3
+1 2 2
+4
+1 2 3 3
+
+Output:
+()(1)(1 2)(1 2 2)(2)(2 2)
+()(1)(1 2)(1 2 3)(1 2 3 3)(1 3)(1 3 3)(2)(2 3)(2 3 3)(3)(3 3)
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static TreeSet<String> res = new TreeSet<>();
+    static void func(int[] a, int s, int e, String rec){
+        res.add(rec.trim());
+        if(s==e){
+            res.add(rec+String.valueOf(a[s]));
+        }
+        else{
+            func(a,s+1, e, rec+String.valueOf(a[s])+" ");
+            func(a,s+1, e, rec);
+        }
+    }
+	public static void main (String[] args) {
+		//code
+		Scanner in = new Scanner(System.in);
+		int test = in.nextInt();
+		while(test-- >0){
+		    int n = in.nextInt();
+		    int[] a = new int[n];
+		    for(int i=0;i<n;i++) a[i]=in.nextInt();
+		    Arrays.sort(a);
+		  //  System.out.println(Arrays.toString(a));
+		    func(a, 0, n-1, "");
+		    for(String s: res) System.out.print("("+s+")");
+		    System.out.println();
+		    res.clear();
+		}
+	}
+}

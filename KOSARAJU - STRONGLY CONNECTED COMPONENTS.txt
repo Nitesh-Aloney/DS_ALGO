@@ -1,0 +1,73 @@
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class Gfg
+{
+    public static void main (String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            // arraylist of arraylist to represent graph
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            
+            int vertices = Integer.parseInt(sc.next());
+            int edges = Integer.parseInt(sc.next());
+            
+            for(int i =0; i < vertices; i++)
+                list.add(i, new ArrayList<Integer>());
+                
+            for(int i = 1; i <= edges; i++)
+            {    int u = Integer.parseInt(sc.next());
+                 int v = Integer.parseInt(sc.next());
+                 
+                 // adding directed edgese between 
+                 // vertex 'u' and 'v'
+                 list.get(u).add(v);
+            }
+            
+            Solution T = new Solution();
+            System.out.println(T.kosaraju(list, vertices));
+		}
+    }
+}
+class Solution
+{
+    boolean[] v;
+    boolean flag = true;
+    Stack<Integer> s = new Stack<Integer>();
+    public void dfs(ArrayList<ArrayList<Integer>> g, int key){
+        v[key] = true;
+        for(int ele : g.get(key)){
+            if(!v[ele]) dfs(g, ele, s);
+        }
+        if(flag) s.push(key);
+    }
+    public int kosaraju(int n, ArrayList<ArrayList<Integer>> g)
+    {
+        int res = 0;
+        v = new boolean[n];
+        
+        for(int i = 0; i < n; i++) if(!v[i]) dfs(g, i);
+        
+        ArrayList<ArrayList<Integer>> gt = new ArrayList<>();
+        for(int i = 0 ; i < n ; i++) gt.add(new ArrayList<Integer>());
+        for(int i = 0 ; i < n ; i++){
+            for(Integer ele : g.get(i))  gt.get(ele).add(i);
+        }
+        
+        flag = false;
+        Arrays.fill(v, false);
+        while(!s.isEmpty()){
+            int ele = s.pop();
+            if(!v[ele]){
+                dfs(gt, ele);
+                res++;
+            }
+        }
+        return res;
+    }
+}

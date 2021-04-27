@@ -1,0 +1,77 @@
+Given a number K and string S of digits denoting a positive integer, build the largest number possible by performing swap operations on the digits of S atmost K times.
+
+Examples :
+Input:
+3
+4
+1234567
+3
+3435335
+2
+1034
+
+Output:
+7654321
+5543333
+4301
+
+Input:
+1
+4
+129814999
+
+Output: 
+999984211
+
+// { Driver Code Starts
+import java.io.*;
+import java.util.*;
+class GfG
+{
+    public static void main(String args[])throws IOException
+        {
+            Scanner sc = new Scanner(System.in);
+            int t = sc.nextInt();
+            while(t-->0)
+                {
+                    int k = sc.nextInt();
+                    String str = sc.next();
+                    Solution obj = new Solution();
+                    System.out.println(obj.findMaximumNum(str, k));
+                }
+        }
+}// } Driver Code Ends
+
+
+
+
+class Solution
+{
+    static String res="";
+	static void findMax(char[] ch, int s, int k){
+	    if(k==0 || s>=ch.length){
+	        if(res.compareTo(String.valueOf(ch))<0) res = String.valueOf(ch);
+	        return;
+	    }
+	    int max = s;
+	    for(int i = s+1; i<ch.length; i++){
+	        if(ch[i]>ch[max]) max = i;
+	    }
+	    if(max==s) findMax(ch, s+1, k);
+	    else{
+	        for(int i=s+1;i<ch.length;i++){
+	            if(ch[i]==ch[max]){
+	                char t = ch[i]; ch[i] = ch[s]; ch[s] = t;
+	                findMax(ch, s+1, k-1);
+	                t = ch[i]; ch[i] = ch[s]; ch[s] = t;
+	            }
+	        }
+	    }
+	}
+    public static String findMaximumNum(String str, int k){
+        char[] ch = str.toCharArray();
+        res= "";
+        findMax(ch, 0, k);
+        return res;
+    }
+}

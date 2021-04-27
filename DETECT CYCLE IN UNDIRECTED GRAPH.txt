@@ -1,0 +1,57 @@
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class DriverClass
+{
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            int nov = sc.nextInt();
+            int edg = sc.nextInt();
+            
+            for(int i = 0; i < nov+1; i++)
+                list.add(i, new ArrayList<Integer>());
+                
+            for(int i = 1; i <= edg; i++)
+            {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                list.get(u).add(v);
+                list.get(v).add(u);
+            }
+            if(new DetectCycle().isCyclic(list, nov) == true)
+                System.out.println("1");
+            else System.out.println("0");
+        }
+    }
+}
+class DetectCycle
+{
+    ArrayList<ArrayList<Integer>> g;
+    boolean[] v,s;
+    boolean cyclic(int key, int prev){
+        s[key]=true;
+        ArrayList<Integer> conns = g.get(key);
+        for(int conn : conns){
+            if(conn == prev) continue;
+            if(s[conn] || cyclic(conn, key)) return true;
+        }
+        s[key]=false;
+        return false;
+    }
+    public boolean isCycle(int n, ArrayList<ArrayList<Integer>> adj) {
+        g = adj;
+        v = new boolean[n];
+        s = new boolean[n];
+        for(int i = 0; i < n; i++){
+            if(cyclic(i,-1)) return true;
+        }
+        return false;
+    }
+}

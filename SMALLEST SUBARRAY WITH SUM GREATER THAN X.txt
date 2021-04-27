@@ -1,0 +1,87 @@
+Given an array of integers (A[]) and a number x, find the smallest subarray with sum greater than the given value.
+
+Note: The answer always exists. It is guaranteed that x doesn't exceed the summation of a[i] (from 1 to N).
+
+Example 1:
+
+Input:
+A[] = {1, 4, 45, 6, 0, 19}
+x  =  51
+Output: 3
+Explanation:
+Minimum length subarray is 
+{4, 45, 6}
+
+Example 2:
+Input:
+A[] = {1, 10, 5, 2, 7}
+   x  = 9
+Output: 1
+Explanation:
+Minimum length subarray is {10}
+ 
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function sb() which takes the array A[], its size N and an integer X as inputs and returns the required ouput.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 ≤ N, x ≤ 105
+1 ≤ A[] ≤ 104
+
+
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+	public static void main(String[] args) throws IOException
+	{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(br.readLine().trim());
+        while(t-->0)
+        {
+            StringTokenizer stt = new StringTokenizer(br.readLine());
+            
+            long n = Long.parseLong(stt.nextToken());
+            long m = Long.parseLong(stt.nextToken());
+            // int n = Integer.parseInt(br.readLine().trim());
+            long a[] = new long[(int)(n)];
+            String inputLine[] = br.readLine().trim().split(" ");
+            for (int i = 0; i < n; i++) {
+                a[i] = Long.parseLong(inputLine[i]);
+            }
+            
+            Compute obj = new Compute();
+            System.out.println(obj.sb(a, n, m));
+        }
+	}
+}
+
+// } Driver Code Ends
+
+class Compute {
+    public static long sb(long a[], long n, long x){
+        long sum = a[0];
+        int i=0,j=0;
+        long res=Integer.MAX_VALUE;
+        while(i<a.length){
+            if(sum<=x){
+                j++;
+                if(j==n) break;
+                sum+=a[j];
+            }else{
+                res = Math.min(res, (j-i+1));
+                sum-=a[i];
+                i++;
+            }
+        }
+        return res;
+    }
+}
+

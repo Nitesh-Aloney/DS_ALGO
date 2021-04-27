@@ -1,0 +1,89 @@
+Given a string S with repeated characters (only lowercase). The task is to rearrange characters in a string such that no two adjacent characters are same.
+
+Note : It may be assumed that the string has only lowercase English alphabets.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case contains a single line containing a string of lowercase english alphabets.
+
+Output:
+For each test case in a new line print "1" (without quotes) if the generated string doesn't contains any same adjacent characters, else if no such string is possible to be made print "0" (without quotes).
+
+Constraints:
+1 <= T <= 100
+1 <= length of string <= 104
+
+Example:
+Input:
+3
+geeksforgeeks
+bbbabaaacd
+bbbbb
+
+Output:
+1
+1
+0
+
+Explanation:
+Testcase 1: All the repeated characters of the given string can be rearranged so that no adjacent characters in the string is equal.
+Testcase 3: Repeated characters in the string cannot be rearranged such that there should not be any adjacent repeated character.
+
+
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int find(char[] ch, int s, char target){
+        for(int i = s+1 ; i < ch.length; i++){
+            if(ch[i]!=target) return i;
+        }
+        return -1;
+    }
+    static class Data implements Comparable<Data>{
+        char ch;
+        int count;
+        Data(char ch, int count){
+            this.ch = ch;
+            this.count = count;
+        }
+        @Override
+        public int compareTo(Data sec){
+            return sec.count-this.count;
+        }
+        public String toString(){
+            return "("+this.ch+", "+this.count+")";
+        }
+    }
+	public static void main (String[] args) {
+		Scanner in = new Scanner(System.in);
+		int test = in.nextInt();
+		while(test-- > 0){
+		    char[] ch = in.next().toCharArray();
+		    int n = ch.length;
+		    PriorityQueue<Data> mp = new PriorityQueue<>();
+		    int[] rmp = new int[26];
+		    for(char c : ch) rmp[c-'a']++;
+		    for(int i=0;i<26;i++){
+		        if(rmp[i]>0) mp.add(new Data((char)(i+'a'), rmp[i]));
+		    }
+		    while(mp.size()>1){
+		      //  System.out.print(mp+"    ");
+		        Data ele1 = mp.remove();
+		      //  System.out.print(ele1+"  ");
+		        Data ele2 = mp.remove();
+		      //  System.out.println(ele2+"  ");
+		        ele1.count--;
+		        ele2.count--;
+		        if(ele1.count>0) mp.add(ele1);
+		        if(ele2.count>0) mp.add(ele2);
+		        
+		    }
+		    if(mp.size()==1 && mp.remove().count>1) System.out.println(0);
+		    else System.out.println(1);
+		}
+		in.close();
+	}
+}

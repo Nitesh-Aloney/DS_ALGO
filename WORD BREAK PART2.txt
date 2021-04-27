@@ -1,0 +1,67 @@
+For example, given
+s = "snakesandladder",
+dict = ["snake", "snakes", "and", "sand", "ladder"].
+
+A solution is ["snakes and ladder",
+           "snake sand ladder"].
+
+Exapmle:
+Input:
+1
+5
+lr m lrm hcdar wk
+hcdarlrm
+
+Output:
+(hcdar lr m)(hcdar lrm)
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static void dis(List<String> rec, int n){
+        String res = "(";
+        for(int i =0; i <n-1; i++){
+            res+=rec.get(i)+" ";
+        }
+        res = res+rec.get(n-1)+")";
+        System.out.print(res);
+    }
+    public static void func(int st, int n, String s, Set<String> words, List<String> rec){
+        if(st>=n) {dis(rec, rec.size()); return;}
+        else{
+            for(int i = st+1; i<=n; i++){
+                String sub = s.substring(st, i);
+                if(words.contains(sub)){
+                    List<String> temp = new LinkedList<>(rec);
+                    temp.add(sub);
+                    func(i, n, s, words, temp);
+                }
+            }
+        }
+    }
+	public static void main (String[] args) {
+		//code
+		Scanner in = new Scanner(System.in);
+		int test = in.nextInt();
+		for(int t=0; t<test; t++){
+		    int n = in.nextInt();
+		    Set<String> words = new HashSet<>();
+		    for(int i = 0; i < n ; i ++) words.add(in.next());
+		  //  System.out.println(words);
+		    String s = in.next();
+		    int l = s.length();
+		    for(int i = 1; i <= l; i++){
+		        String sub = s.substring(0, i);
+		        if(words.contains(sub)){
+		            List<String> temp = new LinkedList<String>();
+		            temp.add(sub);
+		            func(i,l,s,words,temp);
+		        }
+		     }
+		     System.out.println();
+		}
+	}
+}

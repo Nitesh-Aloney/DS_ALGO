@@ -1,0 +1,52 @@
+INPUT:
+a geeks heyjude geek geeksforgeeks heydude something 
+
+PREFIX : gee
+geek
+geeks
+geeksforgeeks
+
+
+import java.util.*;
+class Node{
+    boolean eow = false;
+    Node[] mp = new Node[26];
+    void insert(String s){
+        insertRec(this, 0, s);
+    }
+    void insertRec(Node root, int i, String s){
+        if(i==s.length()) root.eow=true;
+        else{
+            if(root.mp[s.charAt(i)-'a']==null) root.mp[s.charAt(i)-'a'] = new Node();
+            insertRec(root.mp[s.charAt(i)-'a'], i+1, s);
+        }
+    }
+}
+public class GFG {
+    static int count = 0;
+    static void search(Node root, String str, int pos){
+        if(pos==str.length()){
+            for(int i=0;i<26;i++){
+                if(count>=3) break;
+                if(root.mp[i]!=null) searchFurther(root.mp[i], str+String.valueOf((char)(i+'a')));
+            }
+        }
+        else search(root.mp[str.charAt(pos)-'a'], str, pos+1);
+    }
+    static void searchFurther(Node root, String sofar){
+        if(root.eow){
+            System.out.println(sofar);
+            count++;
+        }
+        for(int i=0;i<26;i++){
+            if(count<3 && root.mp[i]!=null) searchFurther(root.mp[i], sofar+String.valueOf((char)(i+'a')));
+        }
+    }
+    public static void main(String[] args){ 
+        String[] words = {"a", "geeks", "heyjude", "geek", "geeksforgeeks", "heydude", "something"};
+        Node root = new Node();
+        for(String word : words) root.insert(word);
+        System.out.println("\nsearching for the word....");
+        search(root, "gee", 0);
+    }
+}

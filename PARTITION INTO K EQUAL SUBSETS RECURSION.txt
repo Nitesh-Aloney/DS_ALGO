@@ -1,0 +1,98 @@
+Given an integer array a[] of N elements and an integer K, the task is to check if the array a[] could be divided into K non-empty subsets.
+
+Note: All elements of this array should be part of exactly one partition.
+ 
+
+Example 1:
+
+Input: N = 5, a[] = {2,1,4,5,6}
+       K = 3
+Output: 1
+Explanation: we can divide above array 
+into 3 parts with equal sum as (2, 4), 
+(1, 5), (6)
+
+â€‹Example 2:
+
+Input: N = 5, a[] = {2,1,5,5,6}
+       k = 3
+Output: 0
+Explanation: It is not possible to divide
+above array into 3 parts with equal sum.
+ 
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isKPartitionPossible() which takes the array a[], the size of the array N, and the value of K as inputs and returns true(same as 1) if possible, otherwise false(same as 0).
+
+
+Expected Time Complexity: O(KN-K).
+Expected Auxiliary Space: O(K).
+
+
+Constraints:
+1≤ N,K ≤100
+1≤ a[] ≤100
+
+
+
+// { Driver Code Starts
+import java.util.*;
+
+class Partition_Arr_To_K_Subsets
+{
+	public static void main(String args[])
+	{
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t>0)
+		{
+			int n = sc.nextInt();
+			int a[] = new int[n];
+			for(int i=0;i<n;i++)
+				a[i] = sc.nextInt();
+			int k = sc.nextInt();
+			GfG g = new GfG();
+			if(g.isKPartitionPossible(a,n,k)==true)
+				System.out.println(1);
+			else 
+				System.out.println(0);
+			
+		t--;
+		}
+	}
+}// } Driver Code Ends
+
+
+/*You are required to complete this method */
+class GfG
+{
+    boolean util(int[] a, boolean[] used, int target, int reached, int left, int com){
+        if(reached == target){
+            reached = 0; com--;
+        }
+        if(com == 0) return true;
+        if(left == 0 && reached == 0) return true;
+        for(int i=0;i<a.length;i++){
+            if(used[i]) continue;
+            if(reached+a[i] <= target){
+                used[i]=true;
+                if(util(a, used, target, reached+a[i], left-1, com)) return true;
+                used[i]=false;
+            }
+            else break;
+        }
+        return false;
+    }
+    boolean isKPartitionPossible(int a[], int n, int k){
+        Arrays.sort(a);
+        int sum = 0;
+        for(int ele:a){
+            sum+=ele;
+        }
+        if(sum%k!=0) return false;
+        int target = sum/k;
+        if(a[n-1]>target) return false;
+        boolean[] used = new boolean[n];
+        return util(a, used, target, a[0], n-1, k-1);
+    }
+}

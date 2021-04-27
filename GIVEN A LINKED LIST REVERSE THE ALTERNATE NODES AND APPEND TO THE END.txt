@@ -1,0 +1,100 @@
+Given a linked list, you have to perform the following task:
+
+Extract the alternative nodes from starting from second node.
+Reverse the extracted list.
+Append the extracted list at the end of the original list.
+â€‹Example 1:
+
+Input:
+LinkedList = 10->4->9->1->3->5->9->4
+Output: 10 9 3 9 4 5 1 4
+Explanation: Reversing the alternative
+nodes from the given list, and then
+appending them to the end of the list
+results in a list with the elements as
+10 9 3 9 4 5 1 4.
+â€‹Example 2:
+
+Input:
+LinkedList = 1->2->3->4->5
+Output: 1 3 5 4 2 
+Explanation:
+Your Task:
+The task is to complete the function rearrange() which should rearrange the list as required.
+
+Note: Try to solve the problem without using any extra memory.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+
+
+
+// { Driver Code Starts
+import java.util.*;
+import java.lang.*;
+
+class Node
+{
+    int data;
+    Node next;
+    Node(int key)
+    {
+        data = key;
+        next = null;
+    }
+}
+
+class Rearr
+{
+    static Node head;
+    
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t  =sc.nextInt();
+        
+        while(t-- > 0)
+        {
+            int n = sc.nextInt();
+            int a1 = sc.nextInt();
+            Node head = new Node(a1);
+            Node temp = head;
+            for(int i = 1; i < n; i++)
+            {
+                int a = sc.nextInt();
+                temp.next = new Node(a);
+                temp = temp.next;
+            }
+            
+            GfG gfg = new GfG();
+            gfg.rearrange(head);
+            printLast(head);
+            System.out.println();
+        }
+    }
+    
+    public static void printLast(Node node)
+    {
+        while(node != null)
+        {
+            System.out.print(node.data + " ");
+            node = node.next;
+        }
+    }
+}// } Driver Code Ends
+
+
+class GfG
+{
+    public static void rearrange(Node odd){
+        Node p = odd, ptr =null;
+        while(p!=null && p.next!=null){
+            Node temp = p.next;
+            p.next=p.next.next;
+            if(p.next!=null) p=p.next;
+            temp.next = ptr;
+            ptr = temp;
+        }
+        p.next = ptr;
+    }
+}

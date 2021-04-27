@@ -1,0 +1,78 @@
+Given an infix expression in the form of string str. Convert this infix expression to postfix expression.
+
+Infix expression: The expression of the form a op b. When an operator is in-between every pair of operands.
+Postfix expression: The expression of the form a b op. When an operator is followed for every pair of operands.
+â€‹Note: The order of precedence is: ^ greater than * equals to / greater than + equals to -. 
+Example 1:
+
+Input: str = "a+b*(c^d-e)^(f+g*h)-i"
+Output: abcd^e-fgh*+^*+i-
+Explanation:
+After converting the infix expression 
+into postfix expression, the resultant 
+expression will be abcd^e-fgh*+^*+i-
+Example 2:
+
+Input: str = "A*(B+C)/D"
+Output: ABC+*D/
+Explanation:
+After converting the infix expression 
+into postfix expression, the resultant 
+expression will be ABC+*D/
+ 
+Your Task:
+This is a function problem. You only need to complete the function infixToPostfix() that takes a string(Infix Expression) as a parameter and returns a string(postfix expression). The printing is done automatically by the driver code.
+
+Expected Time Complexity: O(|str|).
+Expected Auxiliary Space: O(|str|).
+
+Constraints:
+1 ≤ |str| ≤ 105
+
+Company Tags
+
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    
+	public static void main (String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int t = Integer.parseInt(br.readLine().trim());
+		while(t-->0){
+		    System.out.println(new solve().infixToPostfix(br.readLine().trim()));
+		}
+	}
+}// } Driver Code Ends
+
+
+class solve{
+    private static int pri(char ch){
+        return (ch=='+' || ch=='-') ? 1 : (ch=='*' || ch=='/') ? 2 : (ch=='^') ? 3 : -1;
+    }
+	public static String infixToPostfix(String exp){
+	    StringBuilder res = new StringBuilder();
+	    Stack<Character> s = new Stack<>();
+	    char[] ch=exp.toCharArray();
+	    int n = ch.length;
+	    for(int i=0;i<n;i++){
+	        if(ch[i]=='(') s.push(ch[i]);
+	        else if(ch[i]==')'){
+	            while(!s.isEmpty() && s.peek()!='(') res.append(s.pop());
+	            if(!s.isEmpty()) s.pop();
+	        }else if(Character.isLetterOrDigit(ch[i])){
+	            res.append(ch[i]);
+	        }else{
+	            while(!s.isEmpty() && pri(s.peek())>=pri(ch[i])){
+	                res.append(s.pop());
+	            }
+	            s.push(ch[i]);
+	        }
+	    }
+	    while(!s.isEmpty()) res.append(s.pop());
+	    return res.toString();
+	}
+}

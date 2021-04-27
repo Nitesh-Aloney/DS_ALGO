@@ -1,0 +1,53 @@
+Find total number of Rectangles (excluding squares) in a N*N chessboard.
+
+Example 1:
+
+Input:
+N = 1
+Output:
+0
+Explanation:
+There is only 1 square on a 1*1 chess
+board. There are no Proper Rectangles.
+Example 2:
+
+Input:
+N = 2
+Output:
+4
+Explanation:
+There are 4 rectangles in a 2*2 chessboard. 
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function rectanglesInChessBoard() which takes an Integer N as input and returns the number of rectangles in a N*N chess board.
+
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= N <= 105
+
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String args[]) throws IOException {
+        BufferedReader read =
+            new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while (t-- > 0) {
+            Long N = Long.parseLong(read.readLine());
+
+            Solution ob = new Solution();
+            System.out.println(ob.rectanglesInChessBoard(N));
+        }
+    }
+}
+class Solution {
+    static Long rectanglesInChessBoard(Long n) {
+        long res = ((n*n*(n+1)*(n+1))/4)-((n)*(2*n+1)*(n+1))/6;
+        return res;
+    }
+}

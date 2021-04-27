@@ -1,0 +1,52 @@
+Given a binary array a[] and a number k, we need to find length of he longest subsegment of ‘1’s possible by changing at most k ‘0’s.
+
+Examples:
+
+Input : a[] = {1, 0, 0, 1, 1, 0, 1}, 
+          k = 1.
+Output : 4
+Explanation : Here, we should only change 1
+zero(0). Maximum possible length we can get
+is by changing the 3rd zero in the array, 
+we get a[] = {1, 0, 0, 1, 1, 1, 1}
+
+Input : a[] = {1, 0, 0, 1, 0, 1, 0, 1, 0, 1}, 
+         k = 2.
+Output : 5
+Output: Here, we can change only 2 zeros. 
+Maximum possible length we can get is by 
+changing the 3rd and 4th (or) 4th and 5th 
+zeros.
+
+
+
+
+import java.io.*;
+import java.util.*;
+
+class GFG {
+    static void solve(int[] a, int k){
+        int n = a.length;
+        int i = 0, j = 0, o = 0, z = 0, res = 0;
+        while(i<n){
+            if(a[j]==1){
+                j++; o++;
+            }else if(z<k){
+                j++; z++;
+            }else{
+                if(a[i]==0) z--;
+                else o--;
+                i++;
+            }
+            res = Math.max(j-i, res);
+            if(j==n) break;
+        }
+        System.out.println(res);
+    }
+	public static void main (String[] args) {
+	    int a[] = { 1, 0, 0, 1, 0, 1, 0, 1}; 
+        int k = 2;
+        System.out.println(Arrays.toString(a));
+        solve(a, k);
+	}
+}

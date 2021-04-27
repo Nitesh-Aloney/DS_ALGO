@@ -1,0 +1,84 @@
+Given a string S, find the length of the longest substring without repeating characters. 
+
+Example 1:
+
+Input:
+S = "geeksforgeeks"
+Output: 7
+Explanation: Longest substring is
+"eksforg".
+Example 2:
+
+Input:
+S = "ABDEFGABEF"
+Output: 6
+Explanation: Longest substring is
+"BDEFGA" and "DEFGAB".
+ 
+
+User Task:
+Your task is to complete the function longestUniqueSubsttr() which takes a string S as and returns the length of the longest substring. You need not take input or print anything.
+
+ 
+
+Expected Time Complexity: O(length of the string).
+Expected Auxiliary Space: O(number of characters).
+
+ 
+
+Constraints:
+1 ≤ length of str ≤ 104
+
+
+
+// { Driver Code Starts
+//Initial Template for Java
+
+import java.io.*;
+import java.util.*;
+
+class GFG
+{
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
+        while(t-- > 0)
+        {
+            String s = read.readLine().trim();
+
+            Solution ob = new Solution();
+            System.out.println(ob.longestUniqueSubsttr(s));
+        }
+    }
+}// } Driver Code Ends
+
+
+//User function Template for Java
+
+
+class Solution{
+    int longestUniqueSubsttr(String s){
+        char[] ch = s.toCharArray();
+        int n = ch.length, res = 1;
+        int[] mp = new int[256];
+        int j = 0, i =1;
+        for(i=0;i<n;){
+            // System.out.print(j+", "+i+", ");
+            int ind = (int)ch[i];
+            if(mp[ind]==0){
+                mp[ind]++;
+                res = Math.max(i-j+1, res);
+                i++;
+            }else{
+                while(mp[ind]>0){
+                    mp[ch[j]]--;
+                    j++;
+                }
+            }
+            // System.out.print(res+"      ");
+        }
+        // System.out.println();
+        return res;
+    }
+}

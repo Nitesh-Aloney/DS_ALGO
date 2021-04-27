@@ -1,0 +1,62 @@
+Given a string S, find length of the longest substring with all distinct characters.  For example, for input "abca", the output is 3 as "abc" is the longest substring with all distinct characters.
+
+Input:
+The first line of input contains an integer T denoting the number of test cases.
+The first line of each test case is String str.
+
+Output:
+Print length of smallest substring with maximum number of distinct characters.
+Note: The output substring should have all distinct characters.
+
+Constraints:
+1 ≤ T ≤ 100
+1 ≤ size of str ≤ 10000
+
+Example:
+Input:
+2
+abababcdefababcdab
+geeksforgeeks
+
+Output:
+6
+7
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int[]  rec = new int[26];
+    static void clear(){
+        for(int i=0;i<26;i++) rec[i]=0;
+    }
+    static boolean evaluate(){
+        for(int i=0;i<26;i++) if(rec[i]>1) return false;
+        return true;
+    }
+	public static void main (String[] args) {
+		Scanner in = new Scanner(System.in);
+		int test= in.nextInt();
+		while(test-->0){
+		    char[] ch = in.next().toCharArray();
+		    int n=ch.length,i=0,j=0,res=0;
+		    clear();
+		    rec[ch[j]-'a']++;
+		    while(i<n && j<n){
+		        if(evaluate()){
+		            j++;
+		            if(j<n) rec[ch[j]-'a']++;
+		        }else{
+		            rec[ch[i]-'a']--;
+		            i++;
+		        }
+		        res = Math.max(res, j-i);
+		    }
+		    System.out.println(res);
+		}
+		
+		in.close();
+	}
+}
