@@ -11,20 +11,18 @@ class Solution
 {
     public static void sort012(int a[], int n)
     {
-        int l=0,m=l,h=a.length-1;
-        while(m<=h){
-            if(a[m]==0){
-                a[m]=1;
-                a[l]=0;
-                m++; l++;
-            }else if(a[m]==1){
-                m++;
-            }else{
-                int t = a[h];
-                a[h]=a[m];
-                a[m]=t;
-                h--;
+        int p0=0,p1=0,i=0;
+        while(i<a.length){
+            if(a[i]==0){
+                a[i]=a[p1];
+                a[p1]=1;
+                a[p0]=0;
+                p0++;   p1++;
+            }else if(a[i]==1){
+                swap(i,p1,a);
+                p1++;
             }
+            i++;
         }
     }
 }
