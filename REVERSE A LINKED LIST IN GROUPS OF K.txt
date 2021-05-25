@@ -1,5 +1,25 @@
 import java.util.*;
 
+// recursive solution
+class Solution
+{
+    public static Node reverse(Node node, int k){
+        if(node == null) return null;
+        int t = k;
+        Node head = null, temp = node;
+        while(k-->0 && node!=null){
+            Node n = node;
+            node = node.next;
+            n.next = head;
+            head = n;
+        }
+        temp.next = reverse(node, t);
+        return head;
+    }
+}
+
+
+// non recursive solution
 public class GFG {
     static class Node{
         int data=0;
