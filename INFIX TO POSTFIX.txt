@@ -7,6 +7,7 @@ Example 1:
 
 Input: str = "a+b*(c^d-e)^(f+g*h)-i"
 Output: abcd^e-fgh*+^*+i-
+	abcd^e-fgh*+^*+i-
 Explanation:
 After converting the infix expression 
 into postfix expression, the resultant 
@@ -26,11 +27,6 @@ This is a function problem. You only need to complete the function infixToPostfi
 Expected Time Complexity: O(|str|).
 Expected Auxiliary Space: O(|str|).
 
-Constraints:
-1 ≤ |str| ≤ 105
-
-Company Tags
-
 
 
 import java.util.*;
@@ -46,31 +42,41 @@ class GFG {
 		    System.out.println(new solve().infixToPostfix(br.readLine().trim()));
 		}
 	}
-}// } Driver Code Ends
+}
 
 
-class solve{
-    private static int pri(char ch){
-        return (ch=='+' || ch=='-') ? 1 : (ch=='*' || ch=='/') ? 2 : (ch=='^') ? 3 : -1;
+class Solution
+{
+    static boolean isChar(Character c){
+        return (c>='a' && c<='z') || (c>='A' && c<='Z');
+    }
+    static int priority(Character c){
+        return (c=='^') ? 3 : (c=='*') ? 2 : (c=='/') ? 1 : (c=='+' || c=='-') ? 0 : -1;
     }
 	public static String infixToPostfix(String exp){
 	    StringBuilder res = new StringBuilder();
 	    Stack<Character> s = new Stack<>();
-	    char[] ch=exp.toCharArray();
-	    int n = ch.length;
-	    for(int i=0;i<n;i++){
-	        if(ch[i]=='(') s.push(ch[i]);
-	        else if(ch[i]==')'){
-	            while(!s.isEmpty() && s.peek()!='(') res.append(s.pop());
-	            if(!s.isEmpty()) s.pop();
-	        }else if(Character.isLetterOrDigit(ch[i])){
-	            res.append(ch[i]);
-	        }else{
-	            while(!s.isEmpty() && pri(s.peek())>=pri(ch[i])){
+	    int i=0, n=exp.length();
+	    while(i<n){
+	        if(exp.charAt(i)=='('){
+	            s.push('(');
+	        }else if(exp.charAt(i)==')'){
+	            while(!s.isEmpty() && s.peek()!='('){
 	                res.append(s.pop());
 	            }
-	            s.push(ch[i]);
+	            if(!s.isEmpty()) 
+	            s.pop();
+	        }else if(isChar(exp.charAt(i))){
+	            res.append(exp.charAt(i));
+	        }else{
+	            while(!s.isEmpty() &&
+	                   s.peek()!='(' && 
+	                   (priority(exp.charAt(i))<=priority(s.peek()))){
+	                res.append(s.pop());
+	            }
+	            s.push(exp.charAt(i));
 	        }
+	        i++;
 	    }
 	    while(!s.isEmpty()) res.append(s.pop());
 	    return res.toString();
