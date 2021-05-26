@@ -2,8 +2,7 @@ class Solution{
     int time = 0;
     int[] low,disc;
     Map<Integer, List<Integer>> g =  new HashMap<>();
-    List<List<Integer>> res = new ArrayList<>()
-                        ;
+    List<List<Integer>> res = new ArrayList<>();
     void dfs(int key, int prev){
         disc[key] = low[key] = ++time;
         for(int i : g.get(key)){
