@@ -46,15 +46,15 @@ class GfG
 
 class Solution
 {
-    public long count(int S[], int m, int n) 
+    public long count(int coins[], int n, int sum) 
     { 
-        long[] res = new long[n+1];
+        long[] res = new long[sum+1];
         res[0]=1;
-        for(int c : S){
-            for(int i = c; i<=n; i++){
-                res[i]=res[i]+res[i-c];
+        for(int coin : coins){
+            for(int i = coin; i<=sum; i++){
+                res[i]=res[i]+res[i-coin];
             }
         }
-        return res[n];
+        return res[sum];
     } 
 }
