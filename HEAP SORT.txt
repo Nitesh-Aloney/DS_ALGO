@@ -1,6 +1,5 @@
 Given an array of size N. The task is to sort the array elements by completing functions heapify() and buildHeap() which are used to implement Heap Sort.
 
-
 Example 1:
 
 Input:
@@ -29,14 +28,11 @@ in order as 1, 2,3,4,5,6,7,8,9,10.
 105 821 55 700 168 9 484 498 498 614 745 288 481 316 927 38 206 636 788 975 203 24 487 646 57 628
 [9, 24, 26, 38, 55, 57, 91, 105, 130, 137, 140, 168, 203, 205, 206, 215, 247, 276, 286, 287, 288, 316, 322, 346, 347, 398, 417, 417, 432, 445, 474, 481, 484, 486, 487, 498, 498, 506, 512, 515, 527, 538, 570, 594, 614, 628, 636, 646, 672, 677, 681, 700, 706, 709, 727, 740, 743, 745, 788, 789, 821, 841, 876, 879, 884, 885, 927, 953, 975, 977]      
 
-
 Your Task :
 Complete the functions heapify() and buildheap().
 
-
 Expected Time Complexity: O(N * Log(N)).
 Expected Auxiliary Space: O(1).
-
 
 Constraints:
 1 <= N <= 106
@@ -50,7 +46,6 @@ class Heap_Sort
 {
     void printArray(int arr[],int n)
     {
-        //int n = arr.length;
         for (int i=0; i<n; ++i)
             System.out.print(arr[i]+" ");
         System.out.println();
@@ -86,9 +81,6 @@ class Heap_Sort
 }
 
 
-// } Driver Code Ends
-
-
 class GfG
 {
     void heapify(int[] a, int max, int i){
@@ -99,8 +91,7 @@ class GfG
             int temp = a[lar];  a[lar] = a[i]; a[i] = temp;
             heapify(a, max, lar);
         }
-    }
-    
+    }    
     void buildHeap(int a[], int n){
         int ind = n/2-1;
         for(int i = ind;i>=0;i--) heapify(a, a.length, i);
