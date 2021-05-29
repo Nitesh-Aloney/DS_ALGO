@@ -1,3 +1,35 @@
+Given an array of integers, find two non-overlapping contiguous sub-arrays such that the absolute difference between the sum of two sub-arrays is maximum.
+ 
+
+Example 1:
+
+Input: 
+arr[] = [-2, -3, 4, -1, -2, 1, 5, -3]
+Output: 12
+Explanation:
+Two subarrays are [-2, -3]
+ and [4, -1, -2, 1, 5]
+
+Example 2:
+Input: 
+arr[] = [2, -1, -2, 1, -4, 2, 8]
+Output: 16
+Explanation:
+Two subarrays are 
+[-1, -2, 1, -4] and [2, 8] 
+ 
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function findMaxAbsDiff() which takes the array arr[] and its size N as inputs and returns the absolute difference between the sum of two sub-arrays which is maximum.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+2 ≤ N ≤ 105
+-103 ≤ arr[i] ≤ 103
+
+
+
 import java.util.*;
 import java.lang.*;
 import java.io.*;
