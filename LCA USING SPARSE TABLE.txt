@@ -40,8 +40,7 @@ class SparseTable{
         int p = floorLog(r-l+1);
         if(r-l+1 > 1<<p){
             int leftPart = RMQ(p, l), rightPart = RMQ(p, r+1-(1<<p));
-            if(a[leftPart]<a[rightPart]) return leftPart;
-            return rightPart;
+            return (a[leftPart]<a[rightPart]) ? leftPart : rightPart;
         }
         return RMQ(p, l); 
     }
